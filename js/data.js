@@ -25,6 +25,11 @@ const MODELS = {
   "akk-kaplya":   {name:"Аккордеон", sub:"Капля", size:"от 113 × 95 см", sleep:"спальное 205 × 70…140", img:"img/p04.webp", scale:"1.13 1.13 1.13"},
   "akk-bb":       {name:"Аккордеон", sub:"без боковин", size:"от 113 × 78 см", sleep:"спальное 205 × 70…140", img:"img/p03.webp", scale:"1.13 1.13 1.13"}
 };
+/* диваны, у которых в 3D есть анимация раскладки «Raskladka» (в списке — первыми, с жёлтым контуром) */
+const UNFOLD = ["uyut-p3", "prem-pr", "uyut-pr-der", "uyut-pr-m", "polina2-pr", "uyut-p-m", "akk-fav-der",
+  "uyut-ott", "uyut-ugl-m", "uyut-g-der", "prem-ott", "prem-g", "polina2-ugl-der", "polina2-ugl-m", "komfort-loft"];
+/* отложены на конец (еврокнижки — делаем последними): в списке — в самом низу */
+const LATER = ["sofia-mb", "sofia-pr", "lilia-der"];
 const FABRICS = [
   {id:null, name:"По умолчанию"},
   {id:"#3F4348", name:"Графит"},
