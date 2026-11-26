@@ -1,0 +1,1163 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Перспектива — мебельная фабрика</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Мебельная фабрика «Перспектива», Самара. Диваны, кресла и пуфы собственного производства. Каждую модель можно покрутить в 3D.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Noto+Sans+Armenian:wght@400;600;800&family=Manrope:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/"}}</script>
+<script type="module" src="https://cdn.jsdelivr.net/npm/@google/model-viewer@3.5.0/dist/model-viewer.min.js"></script>
+<style>
+/* Шоурум фабрики: светлый «каменный» зал, тёмно-бутылочная студия 3D, латунь как акцент; размеры — моноширинным, как на чертеже */
+:root{
+  --bg:#ECEEEA; --surface:#F8F9F6; --ink:#16221E; --muted:#5A6862; --line:#D2D8D1;
+  --accent:#A8761F; --accent-ink:#FFFFFF;
+  --deep:#1B332C; --on-deep:#EDF2EC; --on-deep-muted:#A9BBB2; --deep-line:#2E4A41;
+  --glow:rgba(168,118,31,.16);
+  --f-display:"Unbounded","Noto Sans Armenian","Arial Black",system-ui,sans-serif;
+  --f-body:"Manrope","Noto Sans Armenian",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,Consolas,monospace;
+  --r:14px; --max:1240px;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --bg:#0E1412; --surface:#161F1B; --ink:#E7ECE6; --muted:#97A59D; --line:#27332E;
+  --accent:#D3A04A; --accent-ink:#1A1408;
+  --deep:#11231D; --on-deep:#EDF2EC; --on-deep-muted:#9DB0A6; --deep-line:#25403A;
+  --glow:rgba(211,160,74,.14); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1412; --surface:#161F1B; --ink:#E7ECE6; --muted:#97A59D; --line:#27332E;
+  --accent:#D3A04A; --accent-ink:#1A1408;
+  --deep:#11231D; --on-deep:#EDF2EC; --on-deep-muted:#9DB0A6; --deep-line:#25403A;
+  --glow:rgba(211,160,74,.14); color-scheme:dark}
+
+/* Палитры (кнопки в шапке). Без data-pal — «Лес», как в варианте 1 */
+:root[data-pal="night"]{--bg:#EEF0F5;--surface:#FFFFFF;--ink:#161B33;--muted:#5B6280;--line:#D6D9E4;--accent:#C99F12;--accent-ink:#161B33;--deep:#1B2142;--on-deep:#EEF0F8;--on-deep-muted:#AAB0CC;--deep-line:#2D3560;--glow:rgba(217,178,28,.2)}
+:root[data-pal="rose"]{--bg:#F3EEEE;--surface:#FFFBFA;--ink:#2A1A1E;--muted:#7A6166;--line:#E5D8D9;--accent:#9E3B4A;--accent-ink:#FFFFFF;--deep:#4A2129;--on-deep:#FBEFF0;--on-deep-muted:#D6B3B8;--deep-line:#66323C;--glow:rgba(158,59,74,.15)}
+:root[data-pal="olive"]{--bg:#EFEFE6;--surface:#FAFAF4;--ink:#23261A;--muted:#646A55;--line:#DADBC9;--accent:#6E7A2E;--accent-ink:#FFFFFF;--deep:#2F3520;--on-deep:#F1F2E6;--on-deep-muted:#B9BEA0;--deep-line:#454C30;--glow:rgba(110,122,46,.16)}
+:root[data-pal="graphite"]{--bg:#ECECEC;--surface:#FAFAFA;--ink:#18181A;--muted:#66666C;--line:#D9D9DC;--accent:#B5482F;--accent-ink:#FFFFFF;--deep:#1E1F22;--on-deep:#F2F2F3;--on-deep-muted:#A8A8AE;--deep-line:#34353A;--glow:rgba(181,72,47,.15)}
+:root[data-pal="ice"]{--bg:#ECF2F5;--surface:#FFFFFF;--ink:#10242E;--muted:#587080;--line:#D2DEE4;--accent:#1F7A9C;--accent-ink:#FFFFFF;--deep:#0F3446;--on-deep:#EAF4F8;--on-deep-muted:#9EC0CF;--deep-line:#1D4C62;--glow:rgba(31,122,156,.15)}
+@media (prefers-color-scheme:dark){
+:root[data-pal="night"]:not([data-theme="light"]){--bg:#0D1022;--surface:#151A33;--ink:#E8EAF4;--muted:#9AA0BC;--line:#262C4A;--accent:#E6C234;--accent-ink:#161B33;--deep:#10142B;--on-deep:#EEF0F8;--on-deep-muted:#9AA0BC;--deep-line:#262D52;--glow:rgba(230,194,52,.14)}
+:root[data-pal="rose"]:not([data-theme="light"]){--bg:#160E10;--surface:#21161A;--ink:#F3E8EA;--muted:#B79AA0;--line:#3A272C;--accent:#D9707F;--accent-ink:#1B0E11;--deep:#2A1519;--on-deep:#FBEFF0;--on-deep-muted:#C9A4AA;--deep-line:#4A2830;--glow:rgba(217,112,127,.14)}
+:root[data-pal="olive"]:not([data-theme="light"]){--bg:#12130D;--surface:#1B1D14;--ink:#ECEEE0;--muted:#A3A88E;--line:#2E3122;--accent:#B5C25A;--accent-ink:#15170C;--deep:#1C2013;--on-deep:#F1F2E6;--on-deep-muted:#A9AE90;--deep-line:#353B25;--glow:rgba(181,194,90,.13)}
+:root[data-pal="graphite"]:not([data-theme="light"]){--bg:#0F0F10;--surface:#18181A;--ink:#EDEDEF;--muted:#9C9CA3;--line:#2A2A2E;--accent:#E07052;--accent-ink:#160A05;--deep:#141416;--on-deep:#F2F2F3;--on-deep-muted:#A8A8AE;--deep-line:#2C2D31;--glow:rgba(224,112,82,.14)}
+:root[data-pal="ice"]:not([data-theme="light"]){--bg:#0A161C;--surface:#10212A;--ink:#E6F0F4;--muted:#8FAAB6;--line:#1E3540;--accent:#4FB3D6;--accent-ink:#062029;--deep:#0C2732;--on-deep:#EAF4F8;--on-deep-muted:#8FB3C2;--deep-line:#1B4253;--glow:rgba(79,179,214,.14)}
+}
+.lang{display:flex;align-items:center;gap:2px;border:1px solid var(--line);border-radius:999px;padding:3px;background:color-mix(in srgb,var(--surface) 70%,transparent)}
+.lang button{display:flex;align-items:center;gap:5px;border:0;background:transparent;color:var(--muted);font:600 11px/1 var(--f-mono);letter-spacing:.06em;padding:5px 8px;border-radius:999px;cursor:pointer}
+.lang button svg{width:15px;height:10px;border-radius:2px;box-shadow:0 0 0 .5px rgba(0,0,0,.25)}
+.lang button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.logo-svg{display:block;border-radius:10px}
+@media (max-width:560px){.lang button{padding:5px 6px;font-size:10px}.lang button svg{display:none}}
+.pals{display:flex;gap:6px;align-items:center}
+.looks{display:grid;gap:5px;justify-items:end}
+.bgs{display:flex;gap:6px;align-items:center}
+.bgs span{font:500 10px var(--f-mono);letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-right:2px}
+.bgb{width:22px;height:22px;border-radius:50%;padding:0;cursor:pointer;border:2px solid var(--surface);box-shadow:0 0 0 1px var(--line);background-color:var(--bg);transition:transform .15s}
+.bgb:hover{transform:scale(1.15)}
+.bgb[aria-pressed="true"]{box-shadow:0 0 0 2px var(--accent)}
+#bg-stitch{background-image:radial-gradient(circle,var(--ink) 1.3px,transparent 1.8px),repeating-linear-gradient(45deg,transparent 0 5px,color-mix(in srgb,var(--ink) 35%,transparent) 5px 6px),repeating-linear-gradient(-45deg,transparent 0 5px,color-mix(in srgb,var(--ink) 35%,transparent) 5px 6px);background-size:8px 8px,auto,auto}
+#bg-glow{background-image:radial-gradient(circle at 30% 30%,var(--accent),transparent 60%),radial-gradient(circle at 75% 75%,var(--deep),transparent 60%)}
+#bg-sofas{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20' fill='none' stroke='%23888' stroke-width='1.6' stroke-linejoin='round'%3E%3Cpath d='M5 10V7.5a1.5 1.5 0 0 1 1.5-1.5h7A1.5 1.5 0 0 1 15 7.5V10M3.5 10h13v3.5h-13zM5 13.5V15M15 13.5V15'/%3E%3C/svg%3E");background-size:100%}
+
+.pal{width:22px;height:22px;border-radius:50%;border:2px solid var(--surface);cursor:pointer;padding:0;background:conic-gradient(var(--a) 0 50%,var(--d) 0);box-shadow:0 0 0 1px var(--line);transition:transform .15s}
+.pal:hover{transform:scale(1.15)}
+.pal[aria-pressed="true"]{box-shadow:0 0 0 2px var(--accent)}
+.logo-img{height:44px;width:auto;background:#fff;border-radius:10px;padding:4px 8px;box-sizing:content-box}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 var(--f-body);-webkit-font-smoothing:antialiased}
+img{max-width:100%;display:block}
+a{color:inherit}
+h1,h2,h3{font-family:var(--f-display);font-weight:700;line-height:1.08;text-wrap:balance;margin:0;letter-spacing:-.01em}
+h2{font-size:clamp(28px,4vw,48px)}
+.wrap{max-width:var(--max);margin:0 auto;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.eyebrow{font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--accent)}
+.lead{color:var(--muted);font-size:18px;max-width:58ch}
+.mono{font-family:var(--f-mono)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:6px}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{animation:none!important;transition:none!important}}
+
+/* шапка */
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:60;background:var(--bg)}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:50;background:color-mix(in srgb,var(--bg) 86%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--line)}
+.top .wrap{display:flex;align-items:center;gap:24px;height:74px}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none}
+.brand svg{flex:none}
+.brand b{font:700 15px/1 var(--f-display);letter-spacing:.06em}
+.brand small{display:block;font:500 10px/1.2 var(--f-mono);letter-spacing:.12em;color:var(--muted);text-transform:uppercase;margin-top:4px}
+.nav{display:flex;gap:22px;margin-left:auto}
+.nav a{text-decoration:none;font-weight:600;font-size:14px;color:var(--muted)}
+.nav a:hover{color:var(--ink)}
+.top .phone{font:500 14px var(--f-mono);white-space:nowrap}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;text-decoration:none;font:700 15px/1 var(--f-body);padding:15px 22px;border-radius:999px;background:var(--accent);color:var(--accent-ink);transition:transform .2s,box-shadow .2s}
+.btn:hover{transform:translateY(-1px);box-shadow:0 8px 24px var(--glow)}
+.btn.ghost{background:transparent;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--line)}
+.btn.ghost:hover{box-shadow:inset 0 0 0 1.5px var(--ink)}
+@media (max-width:900px){.nav{display:none}.top .phone{margin-left:auto}}
+@media (max-width:420px){.top .phone{display:none}}
+
+/* первый экран */
+.hero{padding-block:48px 24px;overflow:hidden}
+.hero .wrap{display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:24px;align-items:center}
+.hero h1{font-size:clamp(34px,5.2vw,70px);margin:18px 0 20px}
+.hero h1 em{font-style:normal;color:var(--accent)}
+.hero .cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
+.hero-facts{display:flex;flex-wrap:wrap;gap:8px 28px;margin-top:36px;padding-top:20px;border-top:1px solid var(--line)}
+.hero-facts div{font-size:13px;color:var(--muted)}
+.hero-facts b{display:block;font:500 20px/1.3 var(--f-mono);color:var(--ink)}
+.stage{position:relative;aspect-ratio:7/5.4;max-width:100%}
+.stage::before{content:"";position:absolute;inset:8% 4% 4%;border-radius:50%;background:radial-gradient(closest-side,var(--glow),transparent);filter:blur(10px)}
+.stage model-viewer{position:absolute;inset:0;width:100%;height:100%;--poster-color:transparent;background:transparent}
+.tape{position:absolute;left:10%;right:10%;bottom:4%;display:flex;align-items:center;gap:10px;color:var(--muted);font:500 12px var(--f-mono);pointer-events:none}
+.tape i{flex:1;height:1px;background:currentColor;opacity:.5;position:relative}
+.tape i::before,.tape i::after{content:"";position:absolute;top:-4px;width:1px;height:9px;background:currentColor}
+.tape i:first-child::before{left:0}.tape i:last-child::after{right:0}
+.hint{position:absolute;right:4%;top:4%;font:500 11px var(--f-mono);color:var(--muted);letter-spacing:.08em;text-transform:uppercase;display:flex;align-items:center;gap:8px}
+.hint::before{content:"";width:22px;height:22px;border-radius:50%;border:1.5px dashed currentColor;animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.hotspot{border:0;padding:0;width:26px;height:26px;border-radius:50%;background:var(--accent);box-shadow:0 0 0 6px var(--glow);cursor:pointer;position:relative;--min-hotspot-opacity:0}
+.hotspot::after{content:attr(data-label);position:absolute;left:34px;top:50%;transform:translateY(-50%);white-space:nowrap;background:var(--surface);color:var(--ink);font:600 12px/1.3 var(--f-body);padding:7px 11px;border-radius:8px;border:1px solid var(--line);opacity:0;pointer-events:none;transition:opacity .2s}
+.hotspot:hover::after,.hotspot:focus-visible::after{opacity:1}
+.hotspot::before{content:"";position:absolute;inset:9px;border-radius:50%;background:var(--accent-ink)}
+@media (max-width:900px){.hero .wrap{grid-template-columns:minmax(0,1fr)}.stage{order:-1;aspect-ratio:4/3}}
+
+/* 3D-студия */
+.studio{background:var(--deep);color:var(--on-deep);padding-block:88px;margin-top:56px}
+.studio .wrap{display:grid;grid-template-columns:minmax(0,7fr) minmax(0,4fr);gap:40px;align-items:start}
+.studio .eyebrow{color:var(--accent)}
+.studio h2{margin:14px 0 16px}
+.studio p{color:var(--on-deep-muted)}
+.viewer{position:relative;border-radius:22px;background:radial-gradient(120% 90% at 50% 30%,color-mix(in srgb,var(--on-deep) 9%,transparent),transparent 70%),color-mix(in srgb,#000 18%,var(--deep));border:1px solid var(--deep-line);aspect-ratio:4/3;max-width:100%;overflow:hidden}
+.viewer model-viewer{width:100%;height:100%;--poster-color:transparent}
+.viewer .ar{position:absolute;left:16px;bottom:52px}
+.viewer .color-note{position:absolute;left:16px;bottom:16px;margin:0;max-width:48%;font:500 12px/1.4 var(--f-body);color:var(--on-deep-muted);pointer-events:none}
+.viewer .unfold-btn{position:absolute;left:16px;top:16px;gap:8px}
+.viewer .unfold-btn[hidden]{display:none}
+.viewer .dims{position:absolute;right:16px;bottom:16px;font:500 13px var(--f-mono);color:var(--on-deep-muted);text-align:right}
+.viewer .dims b{display:block;color:var(--on-deep);font-size:18px;font-weight:500}
+.panel{display:flex;flex-direction:column;gap:28px}
+.group h3{font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--on-deep-muted);margin-bottom:12px}
+.models{display:grid;gap:8px}
+.model-btn{display:flex;align-items:center;gap:14px;text-align:left;background:transparent;border:1px solid var(--deep-line);color:var(--on-deep);border-radius:var(--r);padding:10px 14px 10px 10px;cursor:pointer;font:600 15px/1.3 var(--f-body);transition:border-color .2s,background .2s}
+.model-btn img{width:72px;height:48px;object-fit:contain;flex:none}
+.model-btn small{display:block;font:400 12px var(--f-mono);color:var(--on-deep-muted);margin-top:3px}
+.model-btn.draft img{filter:grayscale(1);opacity:.75}
+.model-btn[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
+.swatches{display:flex;flex-wrap:wrap;gap:10px}
+.sw{width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;position:relative;background:var(--c);box-shadow:inset 0 -6px 10px rgba(0,0,0,.25),inset 0 2px 4px rgba(255,255,255,.25);transition:transform .15s}
+.sw:hover{transform:scale(1.08)}
+.sw[aria-pressed="true"]{outline:2px solid var(--accent);outline-offset:3px}
+.sw.orig{background:conic-gradient(from 30deg,#c9b9ad,#5d6066,#c9b9ad)}
+.fabric-name{margin-top:12px;font:500 14px var(--f-mono);color:var(--on-deep)}
+.group[hidden],.note[hidden]{display:none}
+.tlist{grid-template-columns:1fr 1fr}
+.under{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 28px;margin-top:22px}
+.under .g-fabric{flex:1 1 320px}
+.under .note{flex:1 1 100%;order:3;margin:0;font-size:13px}
+.under .btn{flex:none}
+#studio .wrap{grid-template-columns:minmax(0,3fr) minmax(0,2fr)}
+#modelList{gap:6px}
+#modelList .model-btn{gap:8px;padding:5px 8px 5px 5px;font-size:13px;line-height:1.2}
+#modelList .model-btn img{width:50px;height:34px}
+#modelList .model-btn small{font-size:10.5px;margin-top:2px;line-height:1.25}
+@media (max-width:900px){#studio .wrap{grid-template-columns:minmax(0,1fr)}}
+.tlist .model-btn{gap:8px;padding:6px 10px 6px 6px;font-size:14px}
+.tlist .model-btn img{width:52px;height:38px}
+.sw.stone{background:var(--img) center/cover}
+.tcard .t3d{align-self:flex-start;margin-top:auto;padding:10px 16px;font-size:13px}
+.note{font-size:13px;color:var(--on-deep-muted);border-top:1px solid var(--deep-line);padding-top:16px}
+.studio .btn.ghost{color:var(--on-deep);box-shadow:inset 0 0 0 1.5px var(--deep-line)}
+@media (max-width:900px){.studio .wrap{grid-template-columns:minmax(0,1fr)}}
+/* три просмотра подряд: диваны (тёмная подложка) → столы (прозрачно, виден фон сайта) → кресла (подложка) */
+.studio + .studio{margin-top:0}
+.studio.clear{background:transparent;color:var(--ink);--on-deep:var(--ink);--on-deep-muted:var(--muted);--deep-line:var(--line)}
+.studio.clear .viewer{background:transparent;border-color:transparent}
+.viewer .photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;padding:9% 10% 16%;box-sizing:border-box}
+.viewer .soon{position:absolute;left:16px;top:16px;font:500 12px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;padding:9px 14px;border-radius:999px;border:1px solid var(--deep-line);color:var(--on-deep-muted)}
+.viewer .soon[hidden],.viewer .photo[hidden],.viewer model-viewer[hidden]{display:none}
+.model-btn .no3d{color:var(--on-deep-muted);opacity:.8}
+/* пуф «5 в 1» — первая модель в «Креслах фабрики»: его сцена с «Разбери меня» стоит на месте просмотра */
+#cstudio .scene3d{aspect-ratio:4/3;background:radial-gradient(80% 70% at 50% 75%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 70%),color-mix(in srgb,#000 18%,var(--deep));border-color:var(--deep-line)}
+#cstudio .scene3d[hidden],#cstudio .viewer[hidden]{display:none}
+#cstudio .s-tip,#cstudio .s-load,#cstudio .puf-count{color:var(--on-deep-muted)}
+#cstudio .spec-card{background:color-mix(in srgb,var(--deep) 80%,transparent);border-color:var(--deep-line);color:var(--on-deep-muted)}
+#cstudio .spec-card b{color:var(--on-deep)}
+
+/* каталог */
+.catalog{padding-block:96px 40px}
+.sec-head{display:flex;flex-wrap:wrap;align-items:end;justify-content:space-between;gap:20px;margin-bottom:32px}
+.sec-head h2{margin-top:14px}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{border:1px solid var(--line);background:transparent;color:var(--ink);padding:9px 16px;border-radius:999px;font:600 14px var(--f-body);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.chip sup{font:500 10px var(--f-mono);margin-left:4px;opacity:.7}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(260px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;min-width:0;transition:transform .25s,box-shadow .25s}
+.card:hover{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(0,0,0,.35)}
+.card .pic{aspect-ratio:3/2;display:grid;place-items:center;border-radius:12px;background:radial-gradient(70% 60% at 50% 60%,color-mix(in srgb,var(--ink) 6%,transparent),transparent)}
+.card .pic img{max-height:100%;object-fit:contain;transition:transform .4s}
+.card:hover .pic img{transform:scale(1.04)}
+.card .row{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.card .col{font:500 11px var(--f-mono);letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+.card h3{font:600 17px/1.3 var(--f-body);letter-spacing:0}
+.card .size{font:500 13px var(--f-mono);color:var(--muted);display:grid;gap:2px}
+.card .size span b{color:var(--ink);font-weight:500}
+.badge{font:600 11px/1 var(--f-mono);padding:6px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted);white-space:nowrap}
+.badge.on{background:var(--accent);border-color:var(--accent);color:var(--accent-ink);cursor:pointer}
+
+/* что внутри */
+.inside{padding-block:72px}
+.inside .wrap{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:48px;align-items:center}
+.stack{position:relative;height:420px;perspective:1400px}
+.stack .slabs{position:absolute;inset:0;transform-style:preserve-3d;transform:rotateX(58deg) rotateZ(-38deg);display:grid;place-items:center}
+.slab{position:absolute;width:62%;aspect-ratio:2/1.1;border-radius:14px;transition:transform .6s cubic-bezier(.2,.7,.2,1),filter .3s;box-shadow:0 30px 40px -20px rgba(0,0,0,.35)}
+.slab.s1{background:linear-gradient(135deg,#7C8C83,#5E6F66);transform:translateZ(var(--z1,96px))}
+.slab.s2{background:repeating-linear-gradient(90deg,#E6D7B8 0 6px,#D9C7A2 6px 7px),#E6D7B8;transform:translateZ(var(--z2,64px))}
+.slab.s3{background:radial-gradient(circle at 50% 50%,#8C949A 0 32%,#5A6168 34% 44%,transparent 46%) 0 0/26px 26px,#3D4348;transform:translateZ(var(--z3,32px))}
+.slab.s4{background:repeating-linear-gradient(0deg,#C99B5E 0 18px,#B5864A 18px 21px);transform:translateZ(0)}
+.stack:hover,.stack.open{--z1:250px;--z2:170px;--z3:90px}
+.stack.hl .slab{filter:brightness(.5) saturate(.4)}
+.stack.hl .slab.on{filter:none;box-shadow:0 0 0 3px var(--accent),0 0 34px var(--glow),0 30px 40px -20px rgba(0,0,0,.35)}
+.layer{transition:opacity .25s}
+.layers.hl .layer{opacity:.5}
+.layers.hl .layer.on{opacity:1}
+.layers{display:grid;gap:4px;margin-top:28px}
+.layer{display:grid;grid-template-columns:28px 1fr;gap:14px;padding:14px 0;border-top:1px solid var(--line)}
+.layer .dot{width:16px;height:16px;border-radius:5px;margin-top:4px}
+.layer b{display:block;font-size:16px}
+.layer span{color:var(--muted);font-size:14px}
+@media (max-width:900px){.inside .wrap{grid-template-columns:minmax(0,1fr)}.stack{height:320px}}
+
+/* партнёрам */
+.partners{padding-block:72px 96px}
+.p-grid{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:40px;margin-top:36px}
+.perks{display:grid;gap:14px}
+.perk{display:grid;grid-template-columns:44px 1fr;gap:16px;padding:20px;border-radius:18px;background:var(--surface);border:1px solid var(--line)}
+.perk svg{color:var(--accent)}
+.perk b{display:block;font-size:17px;margin-bottom:4px}
+.perk span{color:var(--muted);font-size:15px}
+form{background:var(--ink);color:var(--bg);border-radius:22px;padding:28px;display:grid;gap:14px;align-content:start}
+form h3{font-size:24px}
+form p{margin:0;color:color-mix(in srgb,var(--bg) 70%,var(--ink));font-size:14px}
+label{display:grid;gap:6px;font:600 13px var(--f-body)}
+input,select{font:500 16px var(--f-body);padding:13px 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--bg) 22%,var(--ink));background:color-mix(in srgb,var(--bg) 8%,var(--ink));color:var(--bg);width:100%}
+input::placeholder{color:color-mix(in srgb,var(--bg) 45%,var(--ink))}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-msg{font:500 13px var(--f-mono);color:var(--accent);min-height:1.2em}
+@media (max-width:900px){.p-grid{grid-template-columns:minmax(0,1fr)}}
+@media (max-width:480px){.two{grid-template-columns:1fr}}
+
+/* раскладка и пуф */
+.unfold,.puf{padding-block:88px 24px}
+.unfold .wrap,.puf .wrap{display:grid;grid-template-columns:minmax(0,4fr) minmax(0,7fr);gap:40px;align-items:center}
+.puf .wrap{grid-template-columns:minmax(0,7fr) minmax(0,4fr)}
+.puf .wrap > .scene3d{order:-1}
+.unfold h2,.puf h2{margin:14px 0 18px}
+.mini{font:500 12px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:26px 0 12px}
+.swatches.light + .fabric-name,.puf .fabric-name{color:var(--muted)}
+.sw.pair{background:conic-gradient(from 225deg,var(--c) 0 50%,var(--c2) 0)}
+.note-s{font-size:13px;color:var(--muted);margin-top:22px}
+.scene3d{position:relative;aspect-ratio:7/5;max-width:100%;border-radius:26px;overflow:hidden;touch-action:pan-y;
+  background:radial-gradient(80% 70% at 50% 75%,color-mix(in srgb,var(--accent) 13%,transparent),transparent 70%),var(--surface);border:1px solid var(--line)}
+.scene3d canvas{position:absolute;inset:0;width:100%!important;height:100%!important;display:block}
+.s-ui{position:absolute;left:0;right:0;bottom:20px;display:flex;justify-content:center;pointer-events:none}
+.s-ui > *{pointer-events:auto}
+.s-tip{position:absolute;left:18px;top:16px;font:500 11px var(--f-mono);letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.s-load{position:absolute;inset:0;display:grid;place-items:center;font:500 13px var(--f-mono);color:var(--muted)}
+.btn.big{font-size:17px;padding:17px 28px}
+.btn.pulse{animation:pulse 2.6s ease-in-out infinite}
+@keyframes pulse{0%,70%,100%{box-shadow:0 0 0 0 var(--glow)}35%{box-shadow:0 0 0 14px transparent;transform:scale(1.04)}}
+.bubble{position:absolute;left:50%;top:13%;transform:translate(-50%,8px);background:var(--ink);color:var(--bg);font:600 14px var(--f-body);padding:10px 16px;border-radius:999px;opacity:0;transition:opacity .4s,transform .4s;pointer-events:none;white-space:nowrap}
+.bubble.show{opacity:1;transform:translate(-50%,0)}
+.puf-count{position:absolute;right:18px;top:14px;font:500 13px var(--f-mono);color:var(--muted)}
+.puf-count b{color:var(--accent);font-size:22px}
+.spec-card{position:absolute;right:16px;bottom:16px;display:grid;grid-template-columns:1fr 1fr;gap:2px 14px;background:color-mix(in srgb,var(--surface) 82%,transparent);backdrop-filter:blur(8px);border:1px solid var(--line);border-radius:14px;padding:10px 14px;font-size:11px;color:var(--muted)}
+.spec-card b{display:block;font:500 14px var(--f-mono);color:var(--ink)}
+.akk-dim{position:absolute;left:18px;bottom:22px;font-size:12px;color:var(--muted);opacity:0;transform:translateY(8px);transition:.5s}
+.akk-dim b{display:block;font:500 26px var(--f-mono);color:var(--accent)}
+.akk-dim.show{opacity:1;transform:none}
+@media (max-width:900px){.unfold .wrap,.puf .wrap{grid-template-columns:minmax(0,1fr)}.scene3d{aspect-ratio:1/1.05}.spec-card{left:16px;right:auto;bottom:84px}}
+.fit{display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:16px 20px;margin-bottom:24px}
+.fit label{font:600 15px var(--f-body)}
+.fit input{flex:1;min-width:180px;accent-color:var(--accent)}
+.fit output{font:500 22px var(--f-mono);min-width:110px;text-align:right}
+.fit small{color:var(--muted);font-size:13px;width:100%}
+
+/* Каталог: вкладки-«папки» Диваны / Кресла / Столы, приросшие к панели.
+   Выбранная вкладка — того же цвета, что панель; цветная подложка (.ctab-bg) плавно переезжает
+   к выбранной вкладке, остальные чуть светлее. --i — номер выбранной вкладки (ставит JS). */
+.cat{--i:0;--tw:clamp(100px,15vw,168px);--th:86px;--gap:4px;--cr:18px;--panel:var(--surface);
+  --tab-off:color-mix(in srgb,var(--ink) 7%,var(--surface));--ease:cubic-bezier(.65,0,.25,1)}
+.ctabs{position:relative;z-index:0;display:flex;gap:var(--gap);width:max-content;max-width:100%}
+.ctab{position:relative;width:var(--tw);height:var(--th);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;
+  border:0;padding:0;cursor:pointer;background:var(--tab-off);color:var(--muted);font:600 15px var(--f-body);
+  border-radius:var(--cr) var(--cr) 0 0;transition:color .45s var(--ease),background-color .3s}
+.ctab > *{position:relative;z-index:2}
+.ctab:hover{background:color-mix(in srgb,var(--ink) 11%,var(--surface))}
+.ctab[aria-selected="true"]{color:var(--ink)}
+.ctab sup{position:absolute;top:12px;right:14px;font:500 10px var(--f-mono);opacity:.6}
+.ctab svg{width:38px;height:28px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;transition:transform .45s var(--ease),color .45s}
+.ctab:hover svg{transform:translateY(-2px)}
+.ctab[aria-selected="true"] svg{color:var(--accent)}
+.ctab[aria-selected="true"] svg path{stroke-dasharray:90;animation:draw .9s var(--ease) both}
+@keyframes draw{from{stroke-dashoffset:90}to{stroke-dashoffset:0}}
+.ctab:focus-visible{outline:2px solid var(--accent);outline-offset:-4px}
+.ctab-bg{position:absolute;z-index:1;left:0;top:0;width:var(--tw);height:calc(var(--th) + 1px);background:var(--panel);
+  border-radius:var(--cr) var(--cr) 0 0;transform:translateX(calc(var(--i) * (var(--tw) + var(--gap))));transition:transform .55s var(--ease)}
+/* «перетекающие» углы снизу вкладки, как у закладки папки */
+.ctab-bg::before,.ctab-bg::after{content:"";position:absolute;bottom:0;width:var(--cr);height:var(--cr);transition:opacity .3s}
+.ctab-bg::before{left:calc(-1 * var(--cr));background:radial-gradient(circle at 0 0,transparent calc(var(--cr) - .5px),var(--panel) var(--cr))}
+.ctab-bg::after{right:calc(-1 * var(--cr));background:radial-gradient(circle at 100% 0,transparent calc(var(--cr) - .5px),var(--panel) var(--cr))}
+.cat[data-i="0"] .ctab-bg::before{opacity:0}
+.cpanel{position:relative;background:var(--panel);border-radius:var(--cr);padding:20px 22px;margin-bottom:24px;transition:border-radius .55s var(--ease)}
+.cat[data-i="0"] .cpanel{border-top-left-radius:0}
+.cpanel .fit,.cpanel .guests{background:none;border:0;padding:0;margin:0;border-radius:0}
+.cpane:not([hidden]),.cgrid:not([hidden]){animation:paneIn .5s var(--ease) both}
+.cgrid:not([hidden]){animation-delay:.08s}
+@keyframes paneIn{from{opacity:0;transform:translateY(8px)}}
+.cnote{display:grid;gap:4px}.cnote b{font:600 15px var(--f-body)}.cnote small,.guests small{color:var(--muted);font-size:13px}
+.guests small{width:100%}
+.guests .gcount{margin-left:auto}
+.guests #openAll{padding:9px 16px;font-size:13px}
+.chips[hidden]{display:none}
+@media (max-width:560px){.cat{--th:74px;--cr:14px}.ctab{font-size:13px}.ctab svg{width:32px;height:24px}.ctab sup{display:none}}
+@media (max-width:1100px){.top .phone{display:none}}
+@media (max-width:560px){.pals .pal{width:18px;height:18px}.logo-img{height:34px}}
+
+/* Фоны страницы (?bg=...): полупрозрачный слой за всем сайтом, в цветах палитры */
+.bgfx{position:fixed;inset:0;z-index:-1;pointer-events:none;display:none}
+:root[data-bg] .bgfx{display:block}
+:root[data-bg="stitch"] .bgfx{opacity:.5;background:
+  radial-gradient(circle,color-mix(in srgb,var(--ink) 30%,transparent) 2.2px,transparent 3px) 0 0/56px 56px,
+  repeating-linear-gradient(45deg,transparent 0 38.6px,color-mix(in srgb,var(--ink) 9%,transparent) 38.6px 39.6px),
+  repeating-linear-gradient(-45deg,transparent 0 38.6px,color-mix(in srgb,var(--ink) 9%,transparent) 38.6px 39.6px)}
+:root[data-bg="blueprint"] .bgfx{background:
+  linear-gradient(color-mix(in srgb,var(--accent) 14%,transparent) 1px,transparent 1px) 0 0/120px 120px,
+  linear-gradient(90deg,color-mix(in srgb,var(--accent) 14%,transparent) 1px,transparent 1px) 0 0/120px 120px,
+  linear-gradient(color-mix(in srgb,var(--ink) 5%,transparent) 1px,transparent 1px) 0 0/24px 24px,
+  linear-gradient(90deg,color-mix(in srgb,var(--ink) 5%,transparent) 1px,transparent 1px) 0 0/24px 24px}
+:root[data-bg="weave"] .bgfx{opacity:.7;background:
+  repeating-linear-gradient(0deg,color-mix(in srgb,var(--ink) 6%,transparent) 0 2px,transparent 2px 6px),
+  repeating-linear-gradient(90deg,color-mix(in srgb,var(--accent) 7%,transparent) 0 2px,transparent 2px 6px),
+  radial-gradient(120% 80% at 20% 0%,color-mix(in srgb,var(--accent) 10%,transparent),transparent 60%)}
+:root[data-bg="glow"] .bgfx{overflow:hidden}
+:root[data-bg="glow"] .bgfx::before,:root[data-bg="glow"] .bgfx::after{content:"";position:absolute;width:70vmax;height:70vmax;border-radius:50%;filter:blur(90px);opacity:.35;animation:drift 26s ease-in-out infinite alternate}
+:root[data-bg="glow"] .bgfx::before{background:var(--accent);left:-25vmax;top:-20vmax}
+:root[data-bg="glow"] .bgfx::after{background:var(--deep);right:-25vmax;bottom:-25vmax;opacity:.5;animation-delay:-13s}
+@keyframes drift{to{transform:translate(18vmax,22vmax) scale(1.15)}}
+/* «Дыхание» фона: поверх любого выбранного фона два пятна света в цвет палитры медленно плывут
+   и то разгораются, то гаснут — краски будто переливаются. Двигаем только transform/opacity, это дёшево. */
+.bglight{position:fixed;inset:0;z-index:-1;pointer-events:none;overflow:hidden;display:none}
+:root[data-bg] .bglight{display:block}
+.bglight::before,.bglight::after{content:"";position:absolute;border-radius:50%;filter:blur(80px);will-change:transform,opacity}
+.bglight::before{width:60vmax;height:60vmax;left:20%;top:10%;background:var(--accent);animation:wander 34s ease-in-out infinite alternate,breathe 9s ease-in-out infinite}
+.bglight::after{width:46vmax;height:46vmax;right:-12vmax;top:-14vmax;background:color-mix(in srgb,var(--accent) 60%,#fff);animation:wander2 41s ease-in-out infinite alternate,breathe 12s ease-in-out -5s infinite}
+@keyframes wander{0%{transform:translate(-30vmax,-8vmax) scale(.9)}50%{transform:translate(4vmax,16vmax) scale(1.12)}100%{transform:translate(-12vmax,32vmax) scale(1)}}
+@keyframes wander2{to{transform:translate(-42vmax,48vmax) scale(1.2)}}
+@keyframes breathe{0%,100%{opacity:.05}50%{opacity:.2}}
+:root[data-bg="glow"] .bgfx::before{animation:drift 26s ease-in-out infinite alternate,glowpulse 8s ease-in-out infinite}
+@keyframes glowpulse{0%,100%{opacity:.28}50%{opacity:.5}}
+:root[data-bg="sofas"] .bgfx{opacity:.13;background:var(--ink);
+  -webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='300' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M30 120h150v-36a14 14 0 0 0-14-14H44a14 14 0 0 0-14 14z M18 118h174a10 10 0 0 1 10 10v30H8v-30a10 10 0 0 1 10-10z M22 158v12 M188 158v12'/%3E%3Cpath d='M250 240v-40a12 12 0 0 1 12-12h40v-30a12 12 0 0 1 12-12h70a12 12 0 0 1 12 12v82z M240 240h168v22H240z M248 262v10 M400 262v10'/%3E%3Crect x='300' y='40' width='60' height='60' rx='10'/%3E%3Cpath d='M308 52h44M308 70h44M308 88h44M322 46v48M338 46v48'/%3E%3C/svg%3E") 0 0/420px 300px;
+  mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='420' height='300' fill='none' stroke='black' stroke-width='2.2' stroke-linejoin='round'%3E%3Cpath d='M30 120h150v-36a14 14 0 0 0-14-14H44a14 14 0 0 0-14 14z M18 118h174a10 10 0 0 1 10 10v30H8v-30a10 10 0 0 1 10-10z M22 158v12 M188 158v12'/%3E%3Cpath d='M250 240v-40a12 12 0 0 1 12-12h40v-30a12 12 0 0 1 12-12h70a12 12 0 0 1 12 12v82z M240 240h168v22H240z M248 262v10 M400 262v10'/%3E%3Crect x='300' y='40' width='60' height='60' rx='10'/%3E%3Cpath d='M308 52h44M308 70h44M308 88h44M322 46v48M338 46v48'/%3E%3C/svg%3E") 0 0/420px 300px}
+.top{background:color-mix(in srgb,var(--bg) 80%,transparent)}
+
+/* Вступление: два дивана логотипа съезжаются, надписи выпрыгивают, затем занавес резко уходит вверх */
+html.intro-on{overflow:hidden}
+#intro:not(.go),#intro:not(.go) *{animation-play-state:paused!important}
+#intro{position:fixed;inset:0;z-index:1000;background:#F6F5F2;color:#121212;display:grid;place-items:center;
+  animation:curtain .8s cubic-bezier(.75,0,.2,1) 2.55s forwards;box-shadow:0 10px 40px rgba(0,0,0,.35)}
+#intro::after{content:"";position:absolute;left:0;right:0;bottom:0;height:14px;background:repeating-linear-gradient(90deg,#e4e2dc 0 18px,#d8d5ce 18px 36px)}
+@keyframes curtain{0%{transform:translateY(0)}22%{transform:translateY(26px)}100%{transform:translateY(-106%)}}
+#intro.skip{animation:curtain .55s cubic-bezier(.75,0,.2,1) forwards}
+.i-logo{display:grid;justify-items:center;gap:6px}
+.i-sofas{position:relative;width:min(300px,70vw);aspect-ratio:300/120}
+.i-sofas svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.i-black{animation:inL .8s cubic-bezier(.2,.9,.25,1.25) .15s both}
+.i-red{animation:inR .8s cubic-bezier(.2,.9,.25,1.25) .3s both}
+@keyframes inL{from{transform:translateX(-70vw) rotate(-10deg)}to{transform:none}}
+@keyframes inR{from{transform:translateX(70vw) rotate(10deg)}to{transform:none}}
+.i-small{display:flex;gap:.02em;font:700 clamp(12px,2.2vw,17px)/1 "Manrope",system-ui,sans-serif;letter-spacing:.32em;margin-top:10px;overflow:hidden;padding:4px 0}
+.i-small span{display:inline-block;animation:jump .55s cubic-bezier(.2,.9,.3,1.4) calc(.9s + var(--i)*.035s) both}
+@keyframes jump{from{transform:translateY(140%);opacity:0}to{transform:none;opacity:1}}
+.i-big{display:flex;font:800 clamp(34px,7vw,64px)/1 "Unbounded","Arial Black",system-ui,sans-serif;letter-spacing:.02em;overflow:hidden;padding:4px 0}
+.i-big .l{animation:fromL .6s cubic-bezier(.2,.9,.3,1.15) 1.35s both}
+.i-big .r{animation:fromR .6s cubic-bezier(.2,.9,.3,1.15) 1.35s both}
+@keyframes fromL{from{transform:translateX(-60vw)}to{transform:none}}
+@keyframes fromR{from{transform:translateX(60vw)}to{transform:none}}
+.i-logo{animation:pop .35s ease-out 2s both}
+@keyframes pop{50%{transform:scale(1.05)}}
+.i-pull{position:absolute;left:50%;bottom:14px;translate:-50% 0;display:grid;justify-items:center;animation:pullIn .4s ease-out 1.9s both}
+.i-pull i{width:2px;height:44px;background:#9a958c}
+.i-pull b{width:26px;height:26px;border:3px solid #9a958c;border-radius:50%;margin-top:-2px}
+@keyframes pullIn{from{opacity:0;transform:translateY(-14px)}}
+.i-skip{position:absolute;right:20px;top:18px;font:500 12px "IBM Plex Mono",monospace;color:#8a857c;background:none;border:0;cursor:pointer}
+@media (prefers-reduced-motion:reduce){#intro{display:none}}
+/* кресла и столы */
+.chairs{padding-top:24px}
+.tables{padding-block:72px}
+.tables .sec-head{align-items:end}
+.tables .lead{margin:12px 0 0}
+.guests{display:flex;flex-wrap:wrap;align-items:center;gap:12px 18px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 18px;margin-bottom:24px}
+.glabel{font:600 15px var(--f-body)}
+.gcount{margin-left:auto;font:500 13px var(--f-mono);color:var(--muted)}
+.tgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:16px}
+.tcard{background:var(--surface);border:1px solid var(--line);border-radius:20px;padding:16px 18px 18px;display:flex;flex-direction:column;gap:10px;min-width:0;outline:none;transition:transform .25s,box-shadow .25s}
+.tcard:hover,.tcard:focus-visible{transform:translateY(-3px);box-shadow:0 18px 40px -24px rgba(0,0,0,.35)}
+.tpic{aspect-ratio:4/3;display:grid;place-items:center;border-radius:14px;background:radial-gradient(70% 60% at 50% 55%,color-mix(in srgb,var(--ink) 7%,transparent),transparent)}
+.tpic{overflow:hidden;padding:6%}
+.tpic img{width:100%;height:100%;object-fit:contain;transition:transform .5s}
+.tcard:hover .tpic img{transform:scale(1.04)}
+.trow{display:flex;justify-content:space-between;align-items:baseline;gap:8px}
+.trow h3{font-size:20px;letter-spacing:.04em}
+.seats{font:600 12px var(--f-mono);color:var(--accent);white-space:nowrap}
+/* вид сверху: две половины столешницы и вставка, которая выезжает при наведении */
+.tv{display:flex;justify-content:center;height:34px}
+.tv i{display:block;height:100%;background:color-mix(in srgb,var(--ink) 14%,var(--surface));transition:width .7s cubic-bezier(.2,.7,.2,1)}
+.tv .half{width:calc(var(--a) / var(--b) * 50%)}
+.tv .half:first-child{border-radius:12px 0 0 12px}.tv .half:last-child{border-radius:0 12px 12px 0}
+.tv .ins{width:0;background:repeating-linear-gradient(90deg,var(--accent) 0 6px,color-mix(in srgb,var(--accent) 70%,var(--surface)) 6px 8px)}
+.tcard:hover .tv .ins,.tcard:focus-visible .tv .ins,.open-all .tv .ins{width:calc((var(--b) - var(--a)) / var(--b) * 100%)}
+.tlen{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px;font:500 13px var(--f-mono);color:var(--muted)}
+.tlen b{font-size:20px;color:var(--ink);font-weight:500;transition:color .3s}
+.tlen .arr{font-size:11px;opacity:.7}
+.tcard:hover .tlen b.o,.open-all .tlen b.o{color:var(--accent)}
+.tmeta{display:flex;flex-wrap:wrap;gap:4px 12px;font-size:13px;color:var(--muted)}
+.tmeta span:not(:last-child)::after{content:" ·";opacity:.6}
+.ttops{display:flex;flex-wrap:wrap;gap:6px}
+.ttops span{font:500 11px var(--f-mono);padding:5px 9px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tmore{font-size:12px;color:var(--muted)}
+@media (max-width:600px){.gcount{margin-left:0}}
+/* подвал */
+footer{border-top:1px solid var(--line);padding-block:48px}
+footer .wrap{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:28px}
+footer h4{font:500 11px/1 var(--f-mono);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:0 0 12px}
+footer p{margin:0;font-weight:600}
+footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px solid var(--line);padding-top:20px}
+</style>
+</head>
+<body>
+<div class="bgfx" aria-hidden="true"></div><div class="bglight" aria-hidden="true"></div>
+<div id="intro" role="presentation">
+  <button class="i-skip" type="button">пропустить</button>
+  <div class="i-logo" aria-hidden="true">
+    <div class="i-sofas">
+      <svg viewBox="0 0 300 120"><g class="i-black" fill="#141414"><rect x="40" y="10" width="110" height="62" rx="10"/><rect x="22" y="40" width="34" height="66" rx="9"/><rect x="134" y="40" width="34" height="66" rx="9"/><rect x="44" y="66" width="104" height="34" rx="6"/><rect x="34" y="104" width="10" height="10"/></g></svg>
+      <svg viewBox="0 0 300 120"><g class="i-red" fill="#E31E24"><rect x="150" y="10" width="110" height="62" rx="10"/><rect x="132" y="40" width="34" height="66" rx="9"/><rect x="244" y="40" width="34" height="66" rx="9"/><rect x="154" y="66" width="104" height="34" rx="6"/><rect x="144" y="104" width="10" height="10"/><rect x="256" y="104" width="10" height="10"/></g></svg>
+    </div>
+    <div class="i-small"><span style="--i:0">М</span><span style="--i:1">Е</span><span style="--i:2">Б</span><span style="--i:3">Е</span><span style="--i:4">Л</span><span style="--i:5">Ь</span><span style="--i:6">Н</span><span style="--i:7">А</span><span style="--i:8">Я</span><span style="--i:9">&nbsp;</span><span style="--i:10">Ф</span><span style="--i:11">А</span><span style="--i:12">Б</span><span style="--i:13">Р</span><span style="--i:14">И</span><span style="--i:15">К</span><span style="--i:16">А</span></div>
+    <div class="i-big"><span class="l">ПЕРСПЕ</span><span class="r">КТИВА</span></div>
+  </div>
+  <div class="i-pull" aria-hidden="true"><i></i><b></b></div>
+</div>
+
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#top" aria-label="Перспектива, на главную">
+      <img class="logo-img" src="img/logo.png" alt="Мебельная фабрика Перспектива" width="117" height="70">
+      <svg class="logo-svg" hidden viewBox="0 0 150 90" width="78" height="47" aria-hidden="true"><rect width="150" height="90" rx="12" fill="#fff"/><g transform="translate(25 8) scale(.34)"><g fill="#141414"><rect x="40" y="10" width="110" height="62" rx="10"/><rect x="22" y="40" width="34" height="66" rx="9"/><rect x="134" y="40" width="34" height="66" rx="9"/><rect x="44" y="66" width="104" height="34" rx="6"/><rect x="34" y="104" width="10" height="10"/></g><g fill="#E31E24"><rect x="150" y="10" width="110" height="62" rx="10"/><rect x="132" y="40" width="34" height="66" rx="9"/><rect x="244" y="40" width="34" height="66" rx="9"/><rect x="154" y="66" width="104" height="34" rx="6"/><rect x="144" y="104" width="10" height="10"/><rect x="256" y="104" width="10" height="10"/></g></g><text data-logo-small x="75" y="60" text-anchor="middle" font-family="Manrope,'Noto Sans Armenian',sans-serif" font-weight="700" font-size="8.5" letter-spacing="1.4" fill="#141414">МЕБЕЛЬНАЯ ФАБРИКА</text><text data-logo-big x="75" y="78" text-anchor="middle" font-family="Unbounded,'Noto Sans Armenian','Arial Black',sans-serif" font-weight="700" font-size="15" fill="#141414" textLength="124" lengthAdjust="spacingAndGlyphs">ПЕРСПЕКТИВА</text></svg>
+    </a>
+    <nav class="nav" aria-label="Разделы">
+      <a href="#studio">3D-просмотр</a><a href="#catalog">Каталог</a><a href="#tables">Столы</a><a href="#inside">Что внутри</a><a href="#partners">Партнёрам</a>
+    </nav>
+    <div class="looks">
+    <div class="pals" id="pals" role="group" aria-label="Цвет сайта">
+      <button class="pal" id="pal-forest" data-p="" title="Лес" style="--a:#A8761F;--d:#1B332C"></button>
+      <button class="pal" id="pal-night" data-p="night" title="Полночь" style="--a:#D9B21C;--d:#1B2142"></button>
+      <button class="pal" id="pal-rose" data-p="rose" title="Роза" style="--a:#C86A78;--d:#4A2129"></button>
+      <button class="pal" id="pal-olive" data-p="olive" title="Олива" style="--a:#A3B04A;--d:#2F3520"></button>
+      <button class="pal" id="pal-graphite" data-p="graphite" title="Графит" style="--a:#D0603F;--d:#1E1F22"></button>
+      <button class="pal" id="pal-ice" data-p="ice" title="Лёд" style="--a:#3FA3C8;--d:#0F3446"></button>
+    </div>
+    <div class="bgs" id="bgs" role="group" aria-label="Фон сайта">
+      <span>фон</span>
+      <button class="bgb" id="bg-stitch" data-bg="stitch" title="Стёжка" aria-pressed="false"></button>
+      <button class="bgb" id="bg-glow" data-bg="glow" title="Мягкий свет" aria-pressed="false"></button>
+      <button class="bgb" id="bg-sofas" data-bg="sofas" title="Силуэты диванов" aria-pressed="false"></button>
+    </div>
+    </div>
+    <span class="phone">+7 (999) 172-75-79</span>
+    <div class="lang" role="group" aria-label="Язык">
+      <button data-lang="ru" id="lang-ru" aria-pressed="true" title="Русский"><svg viewBox="0 0 9 6" aria-hidden="true"><rect width="9" height="2" fill="#fff"/><rect y="2" width="9" height="2" fill="#0039A6"/><rect y="4" width="9" height="2" fill="#D52B1E"/></svg>RU</button>
+      <button data-lang="en" id="lang-en" aria-pressed="false" title="English"><svg viewBox="0 0 60 36" aria-hidden="true"><rect width="60" height="36" fill="#012169"/><path d="M0 0l60 36M60 0L0 36" stroke="#fff" stroke-width="7"/><path d="M0 0l60 36M60 0L0 36" stroke="#C8102E" stroke-width="3"/><path d="M30 0v36M0 18h60" stroke="#fff" stroke-width="11"/><path d="M30 0v36M0 18h60" stroke="#C8102E" stroke-width="6"/></svg>EN</button>
+      <button data-lang="hy" id="lang-hy" aria-pressed="false" title="Հայերեն"><svg viewBox="0 0 9 6" aria-hidden="true"><rect width="9" height="2" fill="#D90012"/><rect y="2" width="9" height="2" fill="#0033A0"/><rect y="4" width="9" height="2" fill="#F2A800"/></svg>HY</button>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+<section class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Фабрика мягкой мебели · Самара</span>
+      <h1>Диван, который можно <em>покрутить</em> до&nbsp;покупки</h1>
+      <p class="lead">Собираем угловые, прямые и модульные диваны, кресла и пуфы на своём производстве. Пружинный блок, ортопедические латы, ткань на выбор.</p>
+      <div class="cta">
+        <a class="btn" href="#studio">Открыть 3D-просмотр
+          <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round"/></svg></a>
+        <a class="btn ghost" href="#partners">Получить прайс-лист</a>
+      </div>
+      <div class="hero-facts">
+        <div><b id="countModels">33</b>модели в каталоге</div>
+        <div><b>до 370 см</b>длина углового</div>
+        <div><b>Пн–Пт</b>9:00–17:00</div>
+      </div>
+    </div>
+    <div class="stage">
+      <model-viewer id="heroViewer" src="models/uyut-p3.glb" alt="Диван Уют П-образный с деревянным подлокотником, 3D-модель"
+        camera-controls disable-zoom disable-pan
+        camera-orbit="-20deg 70deg 82%" field-of-view="28deg" interaction-prompt="none"
+        min-camera-orbit="-45deg 0deg auto" max-camera-orbit="45deg 76deg auto"
+        shadow-intensity="1.1" shadow-softness="0.9" exposure="1.05" environment-image="neutral" tone-mapping="neutral" touch-action="pan-y">
+        <button class="hotspot" slot="hotspot-seat" data-position="-0.2 -0.01 0.04" data-normal="0 1 0" data-label="Спальное место 280 × 150 см" aria-label="Спальное место 280 на 150 см"></button>
+        <button class="hotspot" slot="hotspot-arm" data-position="-0.47 0.07 0.12" data-normal="-1 0 0" data-label="Деревянный подлокотник" aria-label="Деревянный подлокотник"></button>
+        <button class="hotspot" slot="hotspot-inner" data-position="0.12 -0.1 0.07" data-normal="0 0 1" data-label="Внутри: пружинный блок + ППУ" aria-label="Внутри сиденья: независимый пружинный блок и ППУ"></button>
+        <button class="hotspot" slot="hotspot-fabric" data-position="0.02 0.12 -0.2" data-normal="0 0 1" data-label="Ткань на выбор: примерьте цвет в 3D-просмотре" aria-label="Ткань на выбор" onclick="document.getElementById('studio').scrollIntoView()"></button>
+        <button class="hotspot" slot="hotspot-pillows" data-position="-0.3 0.06 -0.15" data-normal="0 0 1" data-label="Подушки спинки: ППУ-крошка" aria-label="Подушки спинки набиты ППУ-крошкой"></button>
+        <button class="hotspot" slot="hotspot-size" data-position="0.38 -0.05 0.3" data-normal="0 0 1" data-label="Габарит 320 × 142 см" aria-label="Габарит 320 на 142 см"></button>
+      </model-viewer>
+      <div class="hint">тяните, чтобы повернуть · наведите на точки</div>
+      <div class="tape"><i></i><span>320 см · Уют П-образный</span><i></i></div>
+    </div>
+  </div>
+</section>
+
+<section class="studio" id="studio">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">3D-просмотр · диваны</span>
+      <h2>Покрутите, приблизьте, примерьте ткань</h2>
+      <p>Вращайте диван мышкой или пальцем, колёсиком приближайте швы. Справа выберите модель, под окном — цвет ткани. На телефоне кнопка «В вашей комнате» ставит диван у вас дома через камеру.</p>
+      <div class="viewer">
+        <model-viewer id="studioViewer" src="models/uyut-p3.glb" alt="3D-модель дивана"
+          camera-controls
+          camera-orbit="-30deg 66deg 110%" min-camera-orbit="-50deg 10deg 60%" max-camera-orbit="50deg 88deg 160%" field-of-view="30deg"
+          shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" environment-image="neutral" tone-mapping="neutral"
+          ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" scale="3.2 3.2 3.2" touch-action="pan-y">
+          <button slot="ar-button" class="btn ar">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.6 8 12 11.7 5.4 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z" fill="currentColor"/></svg>
+            В вашей комнате</button>
+        </model-viewer>
+        <button class="btn unfold-btn" type="button" aria-pressed="false" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.6 8 12 11.7 5.4 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z" fill="currentColor"/></svg>
+          <span>Разложить</span></button>
+        <p class="color-note">Цвет и рисунок в 3D могут немного отличаться от реальных</p>
+        <div class="dims"><span class="d-name">Уют П-образный</span><b class="d-size">320 × 142 см</b><span class="d-sleep">спальное 280 × 150</span></div>
+      </div>
+      <div class="under">
+        <div class="group g-fabric">
+          <h3>Ткань</h3>
+          <div class="swatches s-fabric"></div>
+          <div class="fabric-name n-fabric">По умолчанию</div>
+        </div>
+        <p class="note">Цвет ткани показан примерно: оттенок на экране отличается от живого образца. Образцы тканей можно посмотреть на фабрике.</p>
+        <a class="btn ghost" href="#partners">Узнать цену этой модели</a>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="group">
+        <h3>Предпросмотр</h3>
+        <div class="models tlist mlist" id="modelList"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="studio clear" id="tstudio">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">3D-просмотр · обеденные столы</span>
+      <h2>Разложите стол и примерьте покрытие</h2>
+      <p>Все 12 столов фабрики в 3D. Кнопка «Разложить» показывает, как работает механизм, а справа можно сменить покрытие столешницы и цвет ножек.</p>
+      <div class="viewer">
+        <model-viewer id="tableViewer" alt="3D-модель обеденного стола" loading="lazy"
+          camera-controls auto-rotate auto-rotate-delay="4000" rotation-per-second="10deg"
+          camera-orbit="-35deg 62deg 128%" min-camera-orbit="auto 10deg 60%" max-camera-orbit="auto 88deg 160%" field-of-view="30deg"
+          shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" environment-image="neutral" tone-mapping="neutral"
+          ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" touch-action="pan-y">
+          <button slot="ar-button" class="btn ar">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.6 8 12 11.7 5.4 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z" fill="currentColor"/></svg>
+            В вашей комнате</button>
+        </model-viewer>
+        <button class="btn unfold-btn" type="button" aria-pressed="false" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.6 8 12 11.7 5.4 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z" fill="currentColor"/></svg>
+          <span>Разложить</span></button>
+        <p class="color-note">Цвет и рисунок в 3D могут немного отличаться от реальных</p>
+        <div class="dims"><span class="d-name"></span><b class="d-size"></b><span class="d-sleep"></span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="group">
+        <h3>Предпросмотр</h3>
+        <div class="models tlist mlist" id="tableList"></div>
+      </div>
+      <div class="group">
+        <h3>Покрытие столешницы</h3>
+        <div class="swatches s-stone"></div>
+        <div class="fabric-name n-stone"></div>
+      </div>
+      <div class="group">
+        <h3>Каркас и ножки</h3>
+        <div class="swatches s-paint"></div>
+        <div class="fabric-name n-paint"></div>
+      </div>
+      <p class="note">Рисунок и оттенок покрытия показаны примерно: на каждой плите камня рисунок свой. Образцы покрытий можно посмотреть на фабрике.</p>
+      <a class="btn ghost" href="#partners">Узнать цену этого стола</a>
+    </div>
+  </div>
+</section>
+
+<section class="studio" id="cstudio">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">3D-просмотр · кресла</span>
+      <h2 class="c-title">Один куб. Пять табуреток.</h2>
+      <p class="c-lead">Стенки пуфа — это сиденья четырёх табуреток, крышка — пятая. Нажмите «Разбери меня», а потом чуть поверните пуф: табуретки встанут в ряд.</p>
+      <div class="scene3d" id="pufStage">
+        <div class="s-load" id="pufLoad">Собираем пуф…</div>
+        <span class="s-tip" id="pufTip">крутите мышкой</span>
+        <span class="puf-count" id="pufCount" hidden><b>5</b> мест</span>
+        <div class="bubble" id="pufBubble">или кликните по пуфу дважды</div>
+        <div class="spec-card"><span><b>48×48×48</b>куб</span><span><b>40×40</b>сиденье</span><span><b>44 см</b>высота</span><span><b>22 кг</b>вес</span></div>
+        <div class="s-ui"><button class="btn big pulse" id="pufBtn" type="button">Разбери меня</button></div>
+      </div>
+      <div class="viewer" hidden>
+        <model-viewer id="chairViewer" alt="3D-модель кресла" loading="lazy"
+          camera-controls
+          camera-orbit="-30deg 68deg 2.8m" min-camera-orbit="-50deg 10deg 1.1m" max-camera-orbit="50deg 88deg 5m" field-of-view="30deg"
+          shadow-intensity="1.2" shadow-softness="0.8" exposure="1.1" environment-image="neutral" tone-mapping="neutral"
+          ar ar-modes="webxr scene-viewer quick-look" ar-scale="fixed" touch-action="pan-y">
+          <button slot="ar-button" class="btn ar">
+            <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.6 8 12 11.7 5.4 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z" fill="currentColor"/></svg>
+            В вашей комнате</button>
+        </model-viewer>
+        <img class="photo" alt="" hidden>
+        <span class="soon" hidden>3D-модель скоро</span>
+        <button class="btn unfold-btn" type="button" aria-pressed="false" hidden>
+          <svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 3 7v10l9 5 9-5V7l-9-5Zm0 2.3L18.6 8 12 11.7 5.4 8 12 4.3ZM5 9.7l6 3.4v6.6l-6-3.4V9.7Zm8 10v-6.6l6-3.4v6.6l-6 3.4Z" fill="currentColor"/></svg>
+          <span>Разложить</span></button>
+        <div class="dims"><span class="d-name"></span><b class="d-size"></b><span class="d-sleep"></span></div>
+      </div>
+    </div>
+    <div class="panel">
+      <div class="group">
+        <h3>Предпросмотр</h3>
+        <div class="models tlist mlist" id="chairList"></div>
+      </div>
+      <div class="group g-fabric g-chair">
+        <h3>Ткань</h3>
+        <div class="swatches s-fabric"></div>
+        <div class="fabric-name n-fabric">По умолчанию</div>
+      </div>
+      <div class="group g-puf">
+        <h3>Ткань пуфа</h3>
+        <div class="swatches" id="pufFabrics">
+          <button class="sw pair" id="pf-0" data-pair="#CDBA14,#1E2234" title="Жёлтый + тёмно-синий" aria-pressed="true" style="--c:#CDBA14;--c2:#1E2234"></button>
+          <button class="sw pair" id="pf-1" data-pair="#B7837F,#7A3E32" title="Пыльная роза + кирпич" aria-pressed="false" style="--c:#B7837F;--c2:#7A3E32"></button>
+          <button class="sw pair" id="pf-2" data-pair="#6B7150,#B39A7A" title="Олива + песок" aria-pressed="false" style="--c:#6B7150;--c2:#B39A7A"></button>
+          <button class="sw pair" id="pf-3" data-pair="#2D4C5C,#D8D0C2" title="Глубокий синий + молочный" aria-pressed="false" style="--c:#2D4C5C;--c2:#D8D0C2"></button>
+          <button class="sw pair" id="pf-4" data-pair="#3F4348,#8E9196" title="Графит + серый" aria-pressed="false" style="--c:#3F4348;--c2:#8E9196"></button>
+        </div>
+        <div class="fabric-name" id="pufFabricName">Жёлтый + тёмно-синий</div>
+      </div>
+      <div class="group g-puf">
+        <h3>Металлокаркас</h3>
+        <div class="swatches" id="frameSeg">
+          <button class="sw" id="fr-dark" data-c="dark" title="Тёмный" aria-label="Тёмный каркас" aria-pressed="true" style="--c:#3A3E44"></button>
+          <button class="sw" id="fr-light" data-c="light" title="Светлый" aria-label="Светлый каркас" aria-pressed="false" style="--c:#C9CDD2"></button>
+        </div>
+      </div>
+      <a class="btn ghost" href="#partners">Узнать цену этой модели</a>
+    </div>
+  </div>
+</section>
+
+<section class="catalog" id="catalog">
+  <div class="wrap">
+    <div class="sec-head">
+      <div><span class="eyebrow">Каталог</span><h2 class="cat-title">Диваны</h2></div>
+      <div class="chips" id="chips" role="group" aria-label="Тип дивана"></div>
+    </div>
+    <div class="cat" data-i="0">
+      <div class="ctabs" role="tablist" aria-label="Раздел каталога">
+        <span class="ctab-bg" aria-hidden="true"></span>
+        <button class="ctab" role="tab" id="tab-sofas" data-tab="sofas" aria-selected="true" aria-controls="pane-sofas">
+          <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M6 11V7.5A2.5 2.5 0 0 1 8.5 5h15A2.5 2.5 0 0 1 26 7.5V11"/><path d="M3.5 11A2.5 2.5 0 0 1 6 13.5V15h20v-1.5a2.5 2.5 0 1 1 5 0V19H1v-5.5A2.5 2.5 0 0 1 3.5 11Z"/><path d="M4 19v2.5M28 19v2.5M16 15V8"/></svg>
+          <span>Диваны</span><sup class="n-sofas"></sup></button>
+        <button class="ctab" role="tab" id="tab-chairs" data-tab="chairs" aria-selected="false" aria-controls="pane-chairs" tabindex="-1">
+          <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M10 11V6.5A2.5 2.5 0 0 1 12.5 4h7A2.5 2.5 0 0 1 22 6.5V11"/><path d="M7.5 11a2.5 2.5 0 0 1 2.5 2.5V15h12v-1.5a2.5 2.5 0 1 1 5 0V19H5v-5.5A2.5 2.5 0 0 1 7.5 11Z"/><path d="M8 19l-1 3M24 19l1 3"/></svg>
+          <span>Кресла</span><sup class="n-chairs"></sup></button>
+        <button class="ctab" role="tab" id="tab-tables" data-tab="tables" aria-selected="false" aria-controls="pane-tables" tabindex="-1">
+          <svg viewBox="0 0 32 24" aria-hidden="true"><path d="M3 9.5h26"/><path d="M5 9.5 6.5 7h19L27 9.5"/><path d="M8 9.5 6 21M24 9.5l2 11.5M12 9.5h8v3a2 2 0 0 1-2 2h-4a2 2 0 0 1-2-2Z"/></svg>
+          <span>Столы</span><sup class="n-tables"></sup></button>
+      </div>
+      <div class="cpanel">
+        <div class="cpane fit" id="pane-sofas" role="tabpanel" aria-labelledby="tab-sofas">
+          <label for="fitRange">Сколько сантиметров у вас вдоль стены?</label>
+          <input type="range" id="fitRange" min="100" max="400" step="5" value="400">
+          <output id="fitOut" for="fitRange">любая</output>
+          <small id="fitCount">Покажем модели, которые поместятся у вашей стены.</small>
+        </div>
+        <div class="cpane cnote" id="pane-chairs" role="tabpanel" aria-labelledby="tab-chairs" hidden>
+          <b>Кресла под пару к диванам</b>
+          <small>С деревянным подлокотником и мягкие, кресло-книжка со спальным местом, две качалки и пуф «5 в 1». Ткань — любая из коллекции фабрики.</small>
+        </div>
+        <div class="cpane guests" id="pane-tables" role="tabpanel" aria-labelledby="tab-tables" hidden>
+          <span class="glabel">Сколько гостей ждёте?</span><div class="chips" id="gchips" role="group" aria-label="Число гостей"></div>
+          <span class="gcount" id="gcount"></span>
+          <button class="btn ghost" id="openAll" type="button">Раздвинуть все</button>
+          <small>В будни стол компактный, а когда приходят гости — раздвигается на 40–60 см. Наведите на стол, чтобы его раздвинуть.</small>
+        </div>
+      </div>
+      <div class="cgrid" data-grid="sofas"><div class="grid" id="grid"></div></div>
+      <div class="cgrid" data-grid="chairs" hidden><div class="grid" id="chairGrid"></div></div>
+      <div class="cgrid" data-grid="tables" id="tables" hidden><div class="tgrid" id="tgrid"></div></div>
+    </div>
+  </div>
+</section>
+
+<section class="inside" id="inside">
+  <div class="wrap">
+    <div class="stack" id="stack" aria-hidden="true">
+      <div class="slabs"><div class="slab s4"></div><div class="slab s3"></div><div class="slab s2"></div><div class="slab s1"></div></div>
+    </div>
+    <div>
+      <span class="eyebrow">Что внутри</span>
+      <h2>Диван в разрезе</h2>
+      <p class="lead">Наведите на схему, и слои разойдутся. Так устроено сиденье в моделях «Премиум», «Уют», «Полина&nbsp;2» и «София».</p>
+      <div class="layers">
+        <div class="layer" data-s="s1"><i class="dot" style="background:#6E7F76"></i><div><b>Мебельная ткань</b><span>Ткань и цвет вы выбираете сами.</span></div></div>
+        <div class="layer" data-s="s2"><i class="dot" style="background:#E2D2B0"></i><div><b>Высокоэластичный ППУ</b><span>Держит форму и не продавливается со временем.</span></div></div>
+        <div class="layer" data-s="s3"><i class="dot" style="background:#5A6168"></i><div><b>Независимый пружинный блок</b><span>Каждая пружина работает отдельно, поэтому сидеть и спать ровно.</span></div></div>
+        <div class="layer" data-s="s4"><i class="dot" style="background:#C2945A"></i><div><b>Ортопедические латы</b><span>Вариант основы вместо пружинного блока в моделях «Уют», «Полина&nbsp;2» и «София». Подушки спинки набиты ППУ-крошкой.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="partners" id="partners">
+  <div class="wrap">
+    <span class="eyebrow">Партнёрам и покупателям</span>
+    <h2>Работаем с магазинами, дизайнерами и&nbsp;частными покупателями</h2>
+    <div class="p-grid">
+      <div class="perks">
+        <div class="perk">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h11v9H3zM14 9h4l3 3v3h-7z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><circle cx="7" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/><circle cx="17" cy="17" r="2" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>
+          <div><b>Доставка</b><span>Постоянным клиентам отправляем заказы транспортными компаниями.</span></div>
+        </div>
+        <div class="perk">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 12l4-4 4 3 4-4 6 5M3 18h18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><b>Сотрудничество</b><span>Хорошие условия для партнёров и разные варианты оплаты заказов.</span></div>
+        </div>
+        <div class="perk">
+          <svg width="40" height="40" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8-8 9-4.6-1-8-4.5-8-9V6l8-3z" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/><path d="M8.5 12l2.5 2.5 4.5-5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          <div><b>Гарантия</b><span>Следим за качеством и выполняем гарантийные обязательства на всю нашу мебель.</span></div>
+        </div>
+      </div>
+      <form id="priceForm" novalidate>
+        <h3>Запросить прайс-лист</h3>
+        <p>Пришлём актуальные цены и условия для вашего города.</p>
+        <label for="f-name">Как к вам обращаться<input id="f-name" name="name" autocomplete="name" placeholder="Имя" required></label>
+        <div class="two">
+          <label for="f-phone">Телефон<input id="f-phone" name="phone" type="tel" autocomplete="tel" placeholder="+7" required></label>
+          <label for="f-city">Город<input id="f-city" name="city" autocomplete="address-level2" placeholder="Самара"></label>
+        </div>
+        <label for="f-who">Кто вы<select id="f-who" name="who"><option>Мебельный магазин</option><option>Дизайнер интерьеров</option><option>Частный покупатель</option></select></label>
+        <button class="btn" type="submit">Получить прайс</button>
+        <div class="form-msg" id="formMsg" role="status"></div>
+      </form>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer id="contacts">
+  <div class="wrap">
+    <div><h4>Телефоны</h4><p class="mono">+7 (999) 172-75-79</p><p class="mono">+7 (927) 768-80-44</p></div>
+    <div><h4>Почта</h4><p class="mono">perspektiva_mf@mail.ru</p></div>
+    <div><h4>Фабрика</h4><p>г. Самара, Гаражный проезд, 3</p></div>
+    <div><h4>Время работы</h4><p>Пн–Пт, 9:00–17:00</p></div>
+    <div class="copy">© 2026 Мебельная фабрика «Перспектива». Демо-версия нового сайта.</div>
+  </div>
+</footer>
+
+<script>
+/* вступление: убираем занавес после анимации; клик или клавиша — пропустить */
+(function(){
+  const el=document.getElementById("intro"); if(!el) return;
+  if(matchMedia("(prefers-reduced-motion: reduce)").matches){ el.remove(); return; }
+  document.documentElement.classList.add("intro-on");
+  const done=()=>{ el.remove(); document.documentElement.classList.remove("intro-on"); };
+  el.addEventListener("animationend",e=>{ if(e.target===el) done(); });
+  const skip=()=>{ el.classList.add("skip","go"); };
+  el.addEventListener("click",skip); addEventListener("keydown",skip,{once:true});
+  // запускаем, когда загрузились шрифты (но не дольше 1,5 с ожидания)
+  const go=()=>{ if(el.classList.contains("go")) return; el.classList.add("go"); setTimeout(done,6000); };
+  Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(go));
+})();
+</script>
+<script src="js/data.js?v=4"></script>
+<script>
+
+const $ = s => document.querySelector(s);
+document.getElementById("countModels").textContent = ITEMS.length + TABLES.length;
+
+/* ---------- каталог ---------- */
+let filter = "all";
+function renderChips(){
+  $("#chips").innerHTML = TYPES.map(([id,label])=>{
+    const n = id==="all" ? SOFAS.length : SOFAS.filter(i=>i[3]===id).length;
+    return `<button class="chip" id="chip-${id}" data-t="${id}" aria-pressed="${filter===id}">${label}<sup>${n}</sup></button>`;
+  }).join("");
+}
+let wall = 400;
+const lengthOf = s => { const m = (s||"").match(/(\d+)/); return m ? +m[1] : null; };
+$("#fitRange").addEventListener("input", e => { wall = +e.target.value; $("#fitOut").textContent = wall>=400 ? "любая" : wall+" см"; renderGrid(); });
+function card([img,col,name,,size,sleep,m]){ return `
+    <article class="card">
+      <div class="row"><span class="col">${col}</span>${m?`<button class="badge on" data-model="${m}">Смотреть в 3D</button>`:`<span class="badge">3D скоро</span>`}</div>
+      <div class="pic"><img src="img/${img}.webp" alt="${col} ${name}" loading="lazy"></div>
+      <h3><span>${col}</span> <span>${name.charAt(0).toLowerCase()+name.slice(1)}</span></h3>
+      <div class="size">${size?`<span>габарит <b>${size}${/см|кг/.test(size)?"":" см"}</b></span>`:""}${sleep?`<span>${/[а-я]/.test(sleep)?sleep:"спальное "+sleep}</span>`:""}</div>
+    </article>`; }
+function renderGrid(){
+  const list = SOFAS.filter(i=>(filter==="all"||i[3]===filter) && (wall>=400 || (lengthOf(i[4])!==null && lengthOf(i[4])<=wall)));
+  $("#fitCount").textContent = wall>=400 ? "Покажем модели, которые поместятся у вашей стены." : `Поместятся: ${list.length} из ${SOFAS.length}. Оставьте 10–15 см запаса на плинтус и розетки.`;
+  $("#grid").innerHTML = list.map(card).join("");
+}
+$("#chairGrid").innerHTML = CHAIRS.map(card).join("");
+$("#chairGrid").addEventListener("click",e=>{const b=e.target.closest("[data-model]"); if(!b) return;
+  const id=Object.keys(CHAIR_MODELS).find(k=>CHAIR_MODELS[k].model===b.dataset.model); if(id){ chairStudio.select(id); $("#cstudio").scrollIntoView(); }});
+
+/* ---------- обеденные столы ---------- */
+let guests = 0;
+const GUESTS = [[0,"Все"],[4,"4"],[6,"6"],[8,"8"],[10,"10+"]];
+function tableCard(t){
+  const add = t.b - t.a;
+  return `<article class="tcard" tabindex="0" style="--a:${t.a};--b:${t.b};--w:${t.w}">
+    <div class="tpic"><img src="img/t-${t.id}.webp" alt="Стол ${t.name}" loading="lazy"></div>
+    <div class="trow"><h3>${t.name}</h3><span class="seats">до ${seatsFor(t.b)} гостей</span></div>
+    <div class="tv" aria-hidden="true"><i class="half"></i><i class="ins"></i><i class="half"></i></div>
+    <div class="tlen"><b>${t.a}</b><span class="arr">→ раздвинуть +${add} →</span><b class="o">${t.b}</b><span>× ${t.w} см</span></div>
+    <div class="tmeta"><span>${t.base}</span><span>${t.mech}</span><span>высота ${t.h} см</span></div>
+    <div class="ttops">${t.top.map(x=>`<span>${x}</span>`).join("")}</div>
+    ${t.more?`<div class="tmore">ещё размеры: ${t.more} см</div>`:""}
+    ${T3D[t.id]?`<button class="btn ghost t3d" type="button" data-t3d="${t.id}">Разложить в 3D</button>`:""}
+  </article>`;
+}
+function renderTables(){
+  $("#gchips").innerHTML = GUESTS.map(([n,l])=>`<button class="chip" id="g-${n}" data-g="${n}" aria-pressed="${guests===n}">${l}</button>`).join("");
+  const list = TABLES.filter(t=>seatsFor(t.b) >= guests).sort((x,y)=>x.b-y.b);
+  $("#tgrid").innerHTML = list.map(tableCard).join("");
+  $("#gcount").textContent = guests ? `Подойдут: ${list.length} из ${TABLES.length}` : `Все ${TABLES.length} столов`;
+}
+$("#gchips").addEventListener("click",e=>{const b=e.target.closest(".chip"); if(!b) return; guests=+b.dataset.g; renderTables();});
+$("#tgrid").addEventListener("click",e=>{const b=e.target.closest("[data-t3d]"); if(!b) return; tableStudio.select("t-"+b.dataset.t3d); $("#tstudio").scrollIntoView();});
+$("#openAll").addEventListener("click",()=>{ const on=$("#tables").classList.toggle("open-all"); $("#openAll").textContent = on ? "Сложить все" : "Раздвинуть все"; });
+renderTables();
+
+/* ---------- вкладки каталога: Диваны / Кресла / Столы ---------- */
+const CAT_TABS = {sofas:["Диваны", SOFAS.length], chairs:["Кресла и пуф", CHAIRS.length], tables:["Обеденные столы", TABLES.length]};
+for(const [t,[,n]] of Object.entries(CAT_TABS)) $(".n-"+t).textContent = n;
+function setTab(t){
+  const tabs = [...document.querySelectorAll(".ctab")], i = tabs.findIndex(b=>b.dataset.tab===t); if(i<0) return;
+  const cat = $(".cat"); cat.dataset.i = i; cat.style.setProperty("--i", i);
+  tabs.forEach(b=>{ const on = b.dataset.tab===t; b.setAttribute("aria-selected", on); b.tabIndex = on ? 0 : -1; });
+  document.querySelectorAll(".cpane").forEach(p=>p.hidden = p.id!=="pane-"+t);
+  document.querySelectorAll(".cgrid").forEach(g=>g.hidden = g.dataset.grid!==t);
+  $(".cat-title").textContent = CAT_TABS[t][0]; $("#chips").hidden = t!=="sofas";
+}
+$(".ctabs").addEventListener("click", e=>{ const b=e.target.closest(".ctab"); if(b) setTab(b.dataset.tab); });
+$(".ctabs").addEventListener("keydown", e=>{ if(!["ArrowLeft","ArrowRight"].includes(e.key)) return;
+  const tabs=[...document.querySelectorAll(".ctab")], i=tabs.findIndex(b=>b.getAttribute("aria-selected")==="true");
+  const n=tabs[(i + (e.key==="ArrowRight"?1:-1) + tabs.length) % tabs.length]; setTab(n.dataset.tab); n.focus(); });
+/* ссылки «Столы» в шапке и т. п. открывают нужную вкладку каталога */
+document.addEventListener("click", e=>{ const a=e.target.closest('a[href="#tables"],a[href="#chairs"]'); if(!a) return;
+  e.preventDefault(); setTab(a.hash.slice(1)); $("#catalog").scrollIntoView(); });
+$("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip"); if(!b) return; filter=b.dataset.t; renderChips(); renderGrid();});
+$("#grid").addEventListener("click",e=>{const b=e.target.closest("[data-model]"); if(!b) return;
+  sofaStudio.select(b.dataset.model); $("#studio").scrollIntoView();});
+/* ---------- фон сайта: три кружка под палитрами; повторный клик убирает фон ---------- */
+function setBg(b){
+  if(b) document.documentElement.dataset.bg = b; else delete document.documentElement.dataset.bg;
+  document.querySelectorAll(".bgb").forEach(x=>x.setAttribute("aria-pressed", x.dataset.bg===b));
+  try{ localStorage.setItem("bg", b||""); }catch(e){}
+}
+$("#bgs").addEventListener("click", e=>{ const x=e.target.closest(".bgb"); if(x) setBg(document.documentElement.dataset.bg===x.dataset.bg ? "" : x.dataset.bg); });
+{ let b = new URLSearchParams(location.search).get("bg"); if(b===null){ try{ b = localStorage.getItem("bg"); }catch(e){} } setBg(b||""); }
+/* ---------- палитры сайта ---------- */
+function setPal(p){
+  if(p) document.documentElement.dataset.pal = p; else delete document.documentElement.dataset.pal;
+  document.querySelectorAll(".pal").forEach(b=>b.setAttribute("aria-pressed", b.dataset.p===(p||"")));
+  try{ localStorage.setItem("pal", p||""); }catch(e){}
+}
+$("#pals").addEventListener("click", e=>{ const b=e.target.closest(".pal"); if(b) setPal(b.dataset.p); });
+{ let p = new URLSearchParams(location.search).get("p"); if(p===null){ try{ p = localStorage.getItem("pal"); }catch(e){} } setPal(p||""); }
+renderChips(); renderGrid();
+
+/* ---------- 3D-студии: диваны, столы, кресла ----------
+   Одна и та же логика на три секции. В каждой: model-viewer, список моделей, кнопка «Разложить»
+   (если в модели есть анимация Raskladka), подписи размеров. У диванов — перекраска ткани,
+   у столов — покрытие столешницы и цвет каркаса, у кресел без 3D — фото. */
+const title = s => s.charAt(0) + s.slice(1).toLowerCase();
+const hex = h => [1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+const texCache = {};
+function loadImg(src){ return new Promise((res,rej)=>{const i=new Image(); i.onload=()=>res(i); i.onerror=rej; i.src=src;}); }
+async function baseData(id){
+  if(texCache[id]) return texCache[id];
+  const img = await loadImg(`models/${id}-tex.jpg`).catch(()=>loadImg(`models/${id}-tex.png`)), w = img.width, h = img.height;
+  const c = document.createElement("canvas"); c.width = w; c.height = h;
+  const ctx = c.getContext("2d"); ctx.drawImage(img, 0, 0);
+  const d = ctx.getImageData(0, 0, w, h);
+  const bc = document.createElement("canvas"); bc.width = w; bc.height = h; const bx = bc.getContext("2d");
+  bx.filter = `grayscale(1) blur(${Math.round(w / 48)}px)`; bx.drawImage(img, 0, 0);
+  const bl = bx.getImageData(0, 0, w, h).data;
+  const ls = []; for(let p = 0; p < d.data.length; p += 4*37) if(d.data[p+3] > 0) ls.push(.299*d.data[p] + .587*d.data[p+1] + .114*d.data[p+2]);
+  ls.sort((a,b) => a-b);
+  return texCache[id] = {d, bl, med: Math.max(30, ls[Math.floor(ls.length*.5)])};
+}
+
+/* Перекраска ткани.
+   1) Из текстуры берём только светотень: мелкие складки и швы (L / размытая L) плюс немного крупной формы.
+      Крупные пятна разного цвета от нейросети при этом выравниваются.
+   2) Светлые ткани (молочный, песок) получают мягкую светотень, чтобы не «пересвечивались».
+   3) Ножки (очень тёмное) и белые вставки, заметно светлее самой ткани, оставляем как есть. */
+async function recolor(id, fabric){
+  const {d, bl, med} = await baseData(id);
+  const t = hex(fabric), src = d.data, out = new ImageData(d.width,d.height), o = out.data;
+  const tl = (.299*t[0] + .587*t[1] + .114*t[2]) / 255;
+  const contrast = 1 - .55*tl;                       // чем светлее ткань, тем мягче тени и блики
+  const soft = v => v < 200 ? v : 200 + 55*Math.tanh((v - 200)/55);
+  for(let p=0;p<src.length;p+=4){
+    const r=src[p],g=src[p+1],b=src[p+2], l=.299*r+.587*g+.114*b, lb=Math.max(8, bl[p]);
+    const detail = Math.min(1.5, Math.max(.5, l/lb)), broad = Math.pow(lb/med, .3);
+    const s = 1 + (detail*broad - 1)*contrast;
+    const keep = Math.min(1, Math.max(0, (l - med - 90)/40))*.9 + Math.min(1, Math.max(0, (20 - l)/20))*.7;
+    o[p]  =soft(t[0]*s)*(1-keep)+r*keep;
+    o[p+1]=soft(t[1]*s)*(1-keep)+g*keep;
+    o[p+2]=soft(t[2]*s)*(1-keep)+b*keep;
+    o[p+3]=src[p+3];
+  }
+  const cc=document.createElement("canvas"); cc.width=d.width; cc.height=d.height; cc.getContext("2d").putImageData(out,0,0);
+  return cc.toDataURL("image/jpeg",.9);
+}
+
+function makeStudio(root, {models, kind, btn, custom}){
+  const q = s => root.querySelector(s);
+  const sv = q("model-viewer"), ub = q(".unfold-btn"), list = q(".mlist"), photo = q(".photo"), soon = q(".soon");
+  let current = null, fabric = null, stone = null, paint = null, origTex = null, origColor = null, stoneTex = {}, job = 0, uCheck = 0;
+  list.innerHTML = Object.entries(models).map(([id,m]) => btn(id,m)).join("");
+  list.addEventListener("click", e=>{ const b=e.target.closest(".model-btn"); if(b) select(b.dataset.id); });
+
+  /* ткань (диваны) */
+  if(kind==="sofa" || kind==="chair"){
+    q(".s-fabric").innerHTML = FABRICS.map((f,i)=>
+      `<button class="sw${f.id?"":" orig"}" data-i="${i}" style="--c:${f.id||"transparent"}" aria-label="${f.name}" title="${f.name}" aria-pressed="${i===0}"></button>`).join("");
+    q(".s-fabric").addEventListener("click", e=>{ const b=e.target.closest(".sw"); if(!b) return;
+      const i=+b.dataset.i; fabric=FABRICS[i].id; q(".n-fabric").textContent=FABRICS[i].name;
+      root.querySelectorAll(".s-fabric .sw").forEach(s=>s.setAttribute("aria-pressed", s===b)); apply(); });
+  }
+  /* покрытие и каркас (столы) */
+  const markTable = () => {
+    root.querySelectorAll(".s-stone .sw").forEach(s=>s.setAttribute("aria-pressed", s.dataset.s===stone));
+    root.querySelectorAll(".s-paint .sw").forEach(s=>s.setAttribute("aria-pressed", s.dataset.p===paint));
+    q(".n-stone").textContent = STONES.find(s=>s.id===stone)?.name || "";
+    q(".n-paint").textContent = PAINTS.find(p=>p.id===paint)?.name || "";
+  };
+  if(kind==="table"){
+    q(".s-stone").innerHTML = STONES.map(s=>
+      `<button class="sw stone" data-s="${s.id}" style="--img:url(img/stone/${s.id}-s.jpg)" aria-label="${s.name}" title="${s.name}" aria-pressed="false"></button>`).join("");
+    q(".s-paint").innerHTML = PAINTS.map(p=>
+      `<button class="sw" data-p="${p.id}" style="--c:${p.id}" aria-label="${p.name}" title="${p.name}" aria-pressed="false"></button>`).join("");
+    q(".s-stone").addEventListener("click", e=>{ const b=e.target.closest(".sw"); if(!b) return; stone=b.dataset.s; markTable(); apply(); });
+    q(".s-paint").addEventListener("click", e=>{ const b=e.target.closest(".sw"); if(!b) return; paint=b.dataset.p; markTable(); apply(); });
+  }
+
+  function select(id){
+    const m = models[id]; if(!m) return; current = id;
+    root.querySelectorAll(".model-btn").forEach(b=>b.setAttribute("aria-pressed", b.dataset.id===id));
+    q(".d-name").textContent=m.name; q(".d-size").textContent=m.size||""; q(".d-sleep").textContent=m.sleep||"";
+    if(custom && custom(id, m)){ ub.hidden = true; clearInterval(uCheck); return; }   // модель показана своим способом (пуф)
+    if(kind==="sofa" || kind==="chair"){ fabric = null; q(".n-fabric").textContent = FABRICS[0].name;
+      root.querySelectorAll(".s-fabric .sw").forEach((s,i)=>s.setAttribute("aria-pressed", i===0)); }
+    /* у столов при каждом выборе — их «родные» покрытие и каркас (или белый мрамор и чёрный каркас) */
+    if(kind==="table"){ const t = T3D[m.table]; stone = t.stone || TABLE_DEFAULT.stone; paint = t.paint || TABLE_DEFAULT.paint; markTable(); }
+    const src = m.glb ? `models/${m.glb}.glb` : null;
+    sv.hidden = !src; if(photo){ photo.hidden = !!src; if(!src){ photo.src = m.img; photo.alt = m.name; } }
+    if(soon) soon.hidden = !!src;
+    if(!src){ ub.hidden = true; return; }
+    sv.setAttribute("scale", m.scale || "1 1 1");
+    if(sv.src!==src){ ub.hidden = true; sv.src = src; } else apply();   // сравниваем с текущей моделью, а не с атрибутом из разметки
+    /* «load» приходит не всегда (модель из кэша), поэтому ещё и проверяем сами */
+    clearInterval(uCheck); let n = 0;
+    uCheck = setInterval(()=>{ if(++n > 60) return clearInterval(uCheck);
+      const an = sv.loaded ? (sv.availableAnimations||[]) : [];
+      if((an.includes("Raskladka") && ub.hidden) || (an.includes("Kachanie") && sv.paused)){ clearInterval(uCheck); initUnfold(); } }, 300);
+  }
+  sv.addEventListener("load", ()=>{ origTex=null; origColor=null; stoneTex={}; apply(); initUnfold(); });
+
+  /* Раскладка: в модели есть анимация (ящик выезжает / половинки разъезжаются, вставка встаёт).
+     Крутим её сами через currentTime: вперёд — разложить, назад — собрать. */
+  let unfolded = false, uAnim = 0, uTime = 0;
+  function initUnfold(){
+    cancelAnimationFrame(uAnim); unfolded = false; uTime = 0;
+    const has = !sv.hidden && (sv.availableAnimations||[]).includes("Raskladka");
+    ub.hidden = !has;
+    /* кресло-качалка: в модели анимация «Kachanie» — качается сама, пока кресло не держат */
+    if(!has && !sv.hidden && (sv.availableAnimations||[]).includes("Kachanie")){ sv.animationName = "Kachanie"; sv.play(); return; }
+    if(!has){ sv.removeAttribute("animation-name"); sv.pause(); return; }
+    sv.animationName = "Raskladka"; sv.play({repetitions:1}); sv.pause(); sv.currentTime = 0; label();
+  }
+  const label = () => { ub.querySelector("span").textContent = unfolded ? "Собрать" : "Разложить"; ub.setAttribute("aria-pressed", unfolded); };
+  ub.addEventListener("click", ()=>{
+    const dur = sv.duration || 1.5; unfolded = !unfolded; label();
+    sv.autoRotate = false; cancelAnimationFrame(uAnim);
+    const from = uTime, to = unfolded ? dur - 0.01 : 0, ms = Math.abs(to-from)/dur*1600, t0 = performance.now();
+    const step = now => { const k = ms ? Math.min(1,(now-t0)/ms) : 1, e = k<.5 ? 2*k*k : 1-Math.pow(-2*k+2,2)/2;
+      sv.currentTime = uTime = from + (to-from)*e; if(k<1) uAnim = requestAnimationFrame(step); };
+    uAnim = requestAnimationFrame(step);
+  });
+
+  async function apply(){
+    const my = ++job, mats = sv.model?.materials; if(!mats || sv.hidden) return;
+    if(kind==="table"){
+      /* в модели стола два материала — «Top» (камень столешницы) и «Paint» (каркас, ножки, торцы) */
+      const top = mats.find(m=>m.name.startsWith("Top")), pm = mats.find(m=>m.name.startsWith("Paint"));
+      if(pm && paint) pm.pbrMetallicRoughness.setBaseColorFactor(paint);
+      if(!top || !stone) return;
+      top.pbrMetallicRoughness.setRoughnessFactor(.5);   // керамика полуглянцевая: без «зеркала» на тёмных покрытиях
+      const tex = stoneTex[stone] || (stoneTex[stone] = await sv.createTexture(`img/stone/${stone}.jpg`));
+      if(my!==job) return;
+      top.pbrMetallicRoughness.baseColorTexture.setTexture(tex);
+    } else if(kind==="sofa" || kind==="chair"){
+      const pbr = mats[0]?.pbrMetallicRoughness; if(!pbr) return;
+      /* модели без текстуры (из нейросети, почищены в Blender): ткань — просто цвет материала */
+      if(!pbr.baseColorTexture?.texture){ if(!origColor) origColor = [...pbr.baseColorFactor];
+        pbr.setBaseColorFactor(fabric || origColor); return; }
+      const slot = pbr.baseColorTexture;
+      if(!origTex) origTex = slot.texture;
+      if(!fabric){ if(origTex) slot.setTexture(origTex); return; }
+      const url = await recolor(models[current].glb, fabric); if(my!==job) return;
+      const tex = await sv.createTexture(url); if(my!==job) return;
+      slot.setTexture(tex);
+    }
+  }
+  return {select, root};
+}
+
+/* диваны */
+const sofaStudio = makeStudio($("#studio"), {kind:"sofa",
+  models: Object.fromEntries(Object.entries(MODELS).sort(([,a],[,b])=>(a.name+" "+a.sub).localeCompare(b.name+" "+b.sub,"ru")).map(([id,m])=>[id,{...m, glb:id}])),   // в списке — по алфавиту
+  btn: (id,m)=>`<button class="model-btn${m.draft?" draft":""}" id="m-${id}" data-id="${id}" aria-pressed="false"><img src="${m.img}" alt=""><span>${m.name}<small>${m.size} · ${m.sub}</small></span></button>`});
+sofaStudio.select("uyut-p3");
+
+/* столы: id вида "t-vega", модель models/t-vega.glb */
+const TABLE_MODELS = {};
+for(const [tid,t] of Object.entries(T3D).sort(([a],[b])=>TABLES.find(x=>x.id===a).name.localeCompare(TABLES.find(x=>x.id===b).name,"ru"))){ const d = TABLES.find(x=>x.id===tid);   // в списке — по алфавиту
+  TABLE_MODELS["t-"+tid] = {table:tid, glb:"t-"+tid, name:"Стол "+title(d.name), size:`${t.a} → ${t.b} × ${t.w} см`,
+    sleep:`${d.mech} · до ${seatsFor(t.b)} гостей`, img:`img/t-${tid}.webp`}; }
+const tableStudio = makeStudio($("#tstudio"), {kind:"table", models:TABLE_MODELS,
+  btn: (id,m)=>`<button class="model-btn" id="m-${id}" data-id="${id}" aria-pressed="false"><img src="${m.img}" alt=""><span>${title(TABLES.find(x=>x.id===m.table).name)}<small>${T3D[m.table].a}→${T3D[m.table].b}</small></span></button>`});
+tableStudio.select("t-tokio");
+
+/* кресла и пуф: [картинка, коллекция, название, тип, габарит, …, 3D] из каталога.
+   Пуф первым: у него вместо model-viewer своя сцена (js/puf.js) с кнопкой «Разбери меня»,
+   тканью-парой и цветом металлокаркаса; у кресел — 3D, когда появится, а пока фото. */
+const CHAIR_MODELS = {};
+/* высота кресла в метрах: модели кресел нормированы по высоте = 1 (blender/fix_chairs.py) */
+const CHAIR_H = {"ch-08":1.0, "ch-glider":0.95, "ch-kach04":0.91, "ch-uyut":1.02, "ch-viktoria":0.9, "ch-polina2":1.0, "ch-prem":1.0, "ch-lilia":0.98};
+/* список в два столбика: слева пуф, Глайдер, модель 08, качалка 04; справа Премиум, Полина 2, Виктория, Уют, Лилия
+   (кнопки идут через одну: левая, правая, левая…, у каждой свой столбик — grid-column) */
+const CHAIR_L = ["p21","p10","p06","p09"], CHAIR_R = ["p17","ch-polina2","p07","p08","p11"];
+const CHAIR_ORDER = []; for(let k=0; k<Math.max(CHAIR_L.length, CHAIR_R.length); k++){ if(CHAIR_L[k]) CHAIR_ORDER.push([CHAIR_L[k],1]); if(CHAIR_R[k]) CHAIR_ORDER.push([CHAIR_R[k],2]); }
+for(const i of CHAIRS) if(!CHAIR_ORDER.some(([k])=>k===i[0])) CHAIR_ORDER.push([i[0],1]);   // новое кресло, если добавят, — в конец
+for(const [key,colN] of CHAIR_ORDER){ const [img,col,name,type,size,sleep,m] = CHAIRS.find(i=>i[0]===key);
+  CHAIR_MODELS["c-"+img] = {colN, glb:type==="pouf"?null:(m||null), puf:type==="pouf", model:m, name:`${col} — ${name.charAt(0).toLowerCase()+name.slice(1)}`, short:col, sub:name,
+    size: size ? (/[а-я]/.test(size) ? size : size+" см") : "", sleep: sleep ? (/[а-я]/.test(sleep) ? sleep : "раскладка "+sleep) : "", img:`img/${img}.webp`, scale: CHAIR_H[m] ? Array(3).fill(CHAIR_H[m]).join(" ") : null}; }
+const cRoot = $("#cstudio"), cTitle = cRoot.querySelector(".c-title"), cLead = cRoot.querySelector(".c-lead");
+const PUF_TEXT = [cTitle.textContent, cLead.textContent],
+      CHAIR_TEXT = ["Кресла фабрики", "Кресла под пару к диванам: с деревянным подлокотником, мягкие, кресло-книжка и качалки. Покрутите кресло в 3D; у кресел без модели пока фото."];
+const chairStudio = makeStudio(cRoot, {kind:"chair", models:CHAIR_MODELS,
+  btn: (id,m)=>`<button class="model-btn" id="m-${id}" data-id="${id}" aria-pressed="false" style="grid-column:${m.colN}"><img src="${m.img}" alt=""><span>${m.short}<small>${m.sub}${m.glb||m.puf?"":` · <span class="no3d">фото</span>`}</small></span></button>`,
+  custom: (id,m)=>{
+    $("#pufStage").hidden = !m.puf; cRoot.querySelector(".viewer").hidden = m.puf;
+    cRoot.querySelectorAll(".g-puf").forEach(g=>g.hidden = !m.puf);
+    cRoot.querySelectorAll(".g-chair").forEach(g=>g.hidden = m.puf || !m.glb);
+    [cTitle.textContent, cLead.textContent] = m.puf ? PUF_TEXT : CHAIR_TEXT;
+    return m.puf; }});
+chairStudio.select(Object.keys(CHAIR_MODELS)[0]);
+
+/* ---------- первый экран: диван плавно покачивается, пока его не трогают ---------- */
+const hv = $("#heroViewer");
+let heroHeld = false, heroIdleSince = -1e9;
+hv.addEventListener("pointerdown", ()=>{ heroHeld = true; });
+addEventListener("pointerup", ()=>{ if(heroHeld){ heroHeld = false; heroIdleSince = performance.now(); } });
+if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+  /* Пределы поворота (атрибуты min/max-camera-orbit): влево/вправо до 45° от фронта,
+     снизу — не ниже 76° (чуть ниже обычного вида, днище дивана не видно), сверху — до вида сверху.
+     Покачивание ±22° вокруг base, поэтому base держим в ±23°, чтобы не упираться в край. */
+  const t0 = performance.now(); let base = -20;
+  (function swing(now){
+    if(!heroHeld && now - heroIdleSince > 6000){
+      if(heroIdleSince > 0){ base = Math.max(-23, Math.min(23, hv.getCameraOrbit().theta * 180 / Math.PI)); heroIdleSince = -1e9; }
+      const t=(now-t0)/1000; hv.cameraOrbit = `${base + 22*Math.sin(t*.35)}deg ${70 - 4*Math.sin(t*.22)}deg 82%`;
+    }
+    requestAnimationFrame(swing);
+  })(t0);
+}
+
+
+/* ---------- 3D-студии диванов и кресел: поворот только ±50° от фронта (спинку не видно, атрибуты min/max-camera-orbit);
+   вместо автокручения диван плавно покачивается ±30°, пока его не трогают 4 с ---------- */
+for(const sv of [$("#studioViewer"), $("#chairViewer")]){
+  let held = false, idle = performance.now();
+  /* расстояние камеры: пока человек сам не приблизил/отдалил — как в атрибуте camera-orbit (у кресел 330%),
+     в процентах от размера модели; при смене модели — снова оно (раньше радиус застывал в метрах до загрузки кресла) */
+  const baseR = (sv.getAttribute("camera-orbit")||"").split(/\s+/)[2] || "auto"; let zoomed = false;
+  sv.addEventListener("load", ()=>{ zoomed = false; sv.cameraOrbit = `${sv.getCameraOrbit().theta}rad ${sv.getCameraOrbit().phi}rad ${baseR}`; });
+  sv.addEventListener("pointerdown", ()=>{ held = true; if(sv.animationName==="Kachanie") sv.pause(); });
+  addEventListener("pointerup", ()=>{ if(held){ held = false; idle = performance.now(); } });
+  sv.addEventListener("wheel", ()=>{ idle = performance.now(); zoomed = true; }, {passive:true});
+  sv.addEventListener("touchmove", e=>{ if(e.touches.length > 1) zoomed = true; }, {passive:true});
+  if(!matchMedia("(prefers-reduced-motion: reduce)").matches){
+    let t0 = null;
+    (function swing(now){
+      if(!held && now - idle > 4000 && !sv.hidden && sv.animationName==="Kachanie" && sv.paused) sv.play();
+      if(!held && now - idle > 4000 && !sv.hidden){
+        const o = sv.getCameraOrbit();
+        if(t0 === null) t0 = now - Math.asin(Math.max(-1, Math.min(1, o.theta*180/Math.PI/30))) / .3 * 1000;
+        sv.cameraOrbit = `${30*Math.sin((now-t0)/1000*.3)}deg ${o.phi}rad ${zoomed ? o.radius+"m" : baseR}`;
+      } else t0 = null;
+      requestAnimationFrame(swing);
+    })(performance.now());
+  }
+}
+/* ---------- разрез ---------- */
+const stack=$("#stack"); stack.addEventListener("click",()=>stack.classList.toggle("open"));
+document.querySelectorAll(".layer[data-s]").forEach(l=>{
+  const on=()=>{ stack.classList.add("open","hl"); stack.querySelector("."+l.dataset.s).classList.add("on"); l.parentElement.classList.add("hl"); l.classList.add("on"); };
+  const off=()=>{ stack.classList.remove("open","hl"); stack.querySelectorAll(".slab").forEach(x=>x.classList.remove("on")); l.parentElement.classList.remove("hl"); l.classList.remove("on"); };
+  l.addEventListener("mouseenter",on); l.addEventListener("mouseleave",off); l.addEventListener("touchstart",()=>{ document.querySelectorAll(".layer.on").forEach(x=>x.dispatchEvent(new Event("mouseleave"))); on(); },{passive:true});
+});
+
+/* ---------- форма ---------- */
+$("#priceForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  const name=$("#f-name").value.trim(), phone=$("#f-phone").value.trim();
+  $("#formMsg").textContent = (!name||phone.replace(/\D/g,"").length<10)
+    ? "Укажите имя и телефон, чтобы мы могли перезвонить."
+    : "Это демо-версия: заявка пока никуда не уходит. Позвоните: +7 (999) 172-75-79.";
+});
+</script>
+<script src="js/i18n.js?v=4"></script>
+<script type="module" src="js/puf.js?v=2"></script>
+</body>
+</html>

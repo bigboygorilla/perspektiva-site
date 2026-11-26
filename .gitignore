@@ -1,0 +1,7 @@
+blender/
+server.py
+*.bat
+__pycache__/
+*.blend
+*.blend1
+.claude/
