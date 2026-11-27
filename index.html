@@ -153,6 +153,7 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .model-btn[aria-pressed="true"]{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 12%,transparent)}
 /* диваны с анимацией раскладки — едва заметный жёлтый контур */
 .model-btn.unfold{box-shadow:inset 0 0 0 1px rgba(232,190,70,.45)}
+.model-btn.later{box-shadow:inset 0 0 0 1px rgba(225,70,70,.6)}
 .swatches{display:flex;flex-wrap:wrap;gap:10px}
 .sw{width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;position:relative;background:var(--c);box-shadow:inset 0 -6px 10px rgba(0,0,0,.25),inset 0 2px 4px rgba(255,255,255,.25);transition:transform .15s}
 .sw:hover{transform:scale(1.08)}
@@ -806,7 +807,7 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
   Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(go));
 })();
 </script>
-<script src="js/data.js?v=14"></script>
+<script src="js/data.js?v=15"></script>
 <script>
 
 const $ = s => document.querySelector(s);
@@ -1059,7 +1060,7 @@ function makeStudio(root, {models, kind, btn, custom}){
 const sofaStudio = makeStudio($("#studio"), {kind:"sofa",
   /* в списке: сначала диваны с раскладкой (UNFOLD в data.js), внутри групп — по алфавиту */
   models: Object.fromEntries(Object.entries(MODELS).sort(([ia,a],[ib,b])=>(UNFOLD.includes(ib)-UNFOLD.includes(ia)) || (LATER.includes(ia)-LATER.includes(ib)) || (a.name+" "+a.sub).localeCompare(b.name+" "+b.sub,"ru")).map(([id,m])=>[id,{...m, glb:id}])),
-  btn: (id,m)=>`<button class="model-btn${m.draft?" draft":""}${UNFOLD.includes(id)?" unfold":""}" id="m-${id}" data-id="${id}" aria-pressed="false"><img src="${m.img}" alt=""><span>${m.name}<small>${m.size} · ${m.sub}</small></span></button>`});
+  btn: (id,m)=>`<button class="model-btn${m.draft?" draft":""}${UNFOLD.includes(id)?" unfold":""}${LATER.includes(id)?" later":""}" id="m-${id}" data-id="${id}" aria-pressed="false"><img src="${m.img}" alt=""><span>${m.name}<small>${m.size} · ${m.sub}</small></span></button>`});
 sofaStudio.select("uyut-p3");
 
 /* столы: id вида "t-vega", модель models/t-vega.glb */
