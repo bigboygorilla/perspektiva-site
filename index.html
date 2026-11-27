@@ -154,6 +154,10 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 /* диваны с анимацией раскладки — едва заметный жёлтый контур */
 .model-btn.unfold{box-shadow:inset 0 0 0 1px rgba(232,190,70,.45)}
 .model-btn.later{box-shadow:inset 0 0 0 1px rgba(225,70,70,.6)}
+.model-btn.done{box-shadow:inset 0 0 0 1px rgba(90,200,110,.75)}
+/* диваны не из DONE — пока недоступны: красная заливка (прозрачность 80 %), не нажимаются */
+.model-btn.off{background:rgba(225,60,60,.2);border-color:rgba(225,60,60,.35);box-shadow:none;cursor:not-allowed}
+.model-btn.off img,.model-btn.off span{opacity:.55}
 .swatches{display:flex;flex-wrap:wrap;gap:10px}
 .sw{width:44px;height:44px;border-radius:50%;border:0;cursor:pointer;position:relative;background:var(--c);box-shadow:inset 0 -6px 10px rgba(0,0,0,.25),inset 0 2px 4px rgba(255,255,255,.25);transition:transform .15s}
 .sw:hover{transform:scale(1.08)}
@@ -807,7 +811,7 @@ footer .copy{grid-column:1/-1;color:var(--muted);font-size:13px;border-top:1px s
   Promise.race([document.fonts ? document.fonts.ready : Promise.resolve(), new Promise(r=>setTimeout(r,1500))]).then(()=>requestAnimationFrame(go));
 })();
 </script>
-<script src="js/data.js?v=15"></script>
+<script src="js/data.js?v=19"></script>
 <script>
 
 const $ = s => document.querySelector(s);
@@ -887,6 +891,7 @@ document.addEventListener("click", e=>{ const a=e.target.closest('a[href="#table
   e.preventDefault(); setTab(a.hash.slice(1)); $("#catalog").scrollIntoView(); });
 $("#chips").addEventListener("click",e=>{const b=e.target.closest(".chip"); if(!b) return; filter=b.dataset.t; renderChips(); renderGrid();});
 $("#grid").addEventListener("click",e=>{const b=e.target.closest("[data-model]"); if(!b) return;
+  if(!DONE.includes(b.dataset.model)) return;   // неготовые диваны пока недоступны
   sofaStudio.select(b.dataset.model); $("#studio").scrollIntoView();});
 /* ---------- фон сайта: три кружка под палитрами; повторный клик убирает фон ---------- */
 function setBg(b){
@@ -1058,9 +1063,9 @@ function makeStudio(root, {models, kind, btn, custom}){
 
 /* диваны */
 const sofaStudio = makeStudio($("#studio"), {kind:"sofa",
-  /* в списке: сначала диваны с раскладкой (UNFOLD в data.js), внутри групп — по алфавиту */
-  models: Object.fromEntries(Object.entries(MODELS).sort(([ia,a],[ib,b])=>(UNFOLD.includes(ib)-UNFOLD.includes(ia)) || (LATER.includes(ia)-LATER.includes(ib)) || (a.name+" "+a.sub).localeCompare(b.name+" "+b.sub,"ru")).map(([id,m])=>[id,{...m, glb:id}])),
-  btn: (id,m)=>`<button class="model-btn${m.draft?" draft":""}${UNFOLD.includes(id)?" unfold":""}${LATER.includes(id)?" later":""}" id="m-${id}" data-id="${id}" aria-pressed="false"><img src="${m.img}" alt=""><span>${m.name}<small>${m.size} · ${m.sub}</small></span></button>`});
+  /* в списке: сначала готовые (DONE, зелёный контур), потом с раскладкой (UNFOLD), внутри групп — по алфавиту */
+  models: Object.fromEntries(Object.entries(MODELS).sort(([ia,a],[ib,b])=>(DONE.includes(ib)-DONE.includes(ia)) || (UNFOLD.includes(ib)-UNFOLD.includes(ia)) || (LATER.includes(ia)-LATER.includes(ib)) || (a.name+" "+a.sub).localeCompare(b.name+" "+b.sub,"ru")).map(([id,m])=>[id,{...m, glb:id}])),
+  btn: (id,m)=>`<button class="model-btn${m.draft?" draft":""}${UNFOLD.includes(id)?" unfold":""}${DONE.includes(id)?" done":""}${LATER.includes(id)?" later":""}${DONE.includes(id)?"":" off"}" id="m-${id}" data-id="${id}" aria-pressed="false"${DONE.includes(id)?"":" disabled"}><img src="${m.img}" alt=""><span>${m.name}<small>${m.size} · ${m.sub}</small></span></button>`});
 sofaStudio.select("uyut-p3");
 
 /* столы: id вида "t-vega", модель models/t-vega.glb */
