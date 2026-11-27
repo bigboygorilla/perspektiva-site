@@ -27,7 +27,7 @@ const MODELS = {
 };
 /* диваны, у которых в 3D есть анимация раскладки «Raskladka» (в списке — первыми, с жёлтым контуром) */
 const UNFOLD = ["uyut-p3", "prem-pr", "uyut-pr-der", "uyut-pr-m", "polina2-pr", "uyut-p-m", "akk-fav-der",
-  "uyut-ott", "uyut-ugl-m", "uyut-g-der", "prem-ott", "prem-g", "polina2-ugl-der", "polina2-ugl-m", "komfort-loft", "prem-ugl", "akk-bb", "akk-kaplya", "sofia-mb", "sofia-pr", "lilia-der", "akk-fav-m"];
+  "uyut-ott", "uyut-ugl-m", "uyut-g-der", "prem-ott", "prem-g", "polina2-ugl-der", "polina2-ugl-m", "komfort-loft", "prem-ugl", "akk-bb", "akk-kaplya", "sofia-mb", "sofia-pr", "lilia-der", "akk-fav-m", "uyut-ugl"];
 /* отложены на конец (еврокнижки — делаем последними): в списке — в самом низу */
 const LATER = [];
 const FABRICS = [
